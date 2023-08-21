@@ -49,12 +49,20 @@ class Response:
         return {}
 
 
-class Request:
+class Session:
     __token = None
 
     @classmethod
-    def set_token(cls, token):
+    def login(cls, token):
         cls.__token = token
+
+    @classmethod
+    def logout(cls):
+        cls.__token = None
+
+    @classmethod
+    def is_authenticated(cls):
+        return cls.__token is not None
 
     @classmethod
     def headers(cls, token=None):
@@ -234,7 +242,7 @@ class Request:
         return res.json()
 
 
-class Resource(SimpleNamespace, Request):
+class Resource(SimpleNamespace, Session):
 
     def __init__(self, response: requests.Response):
         data = response.json()
