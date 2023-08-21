@@ -106,11 +106,11 @@ class Session:
         return Response(response)
 
     @classmethod
-    def build_url(cls, endpoint: str, api_url = API_URL, **query: dict):
+    def build_url(cls, endpoint: str, **query: dict):
         query_string = ''
         if query:
             query_string = '?' + '&'.join([f'{k}={v}' for k,v in query.items()])
-        return f'{api_url}{endpoint}{query_string}'
+        return f'{cls.__api_url}{endpoint}{query_string}'
 
     @classmethod
     def check_dgii_status(cls, environment: int = None):
