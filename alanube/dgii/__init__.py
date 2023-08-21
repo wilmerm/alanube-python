@@ -52,6 +52,12 @@ class Response:
 class Session:
     __token = None
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        Session.logout()
+
     @classmethod
     def login(cls, token):
         cls.__token = token
