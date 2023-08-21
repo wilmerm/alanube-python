@@ -42,49 +42,47 @@ class Response:
     @property
     def errors(self):
         if self.status_code >= 400:
-            return self.json()
+            try:
+                return self.json()
+            except ValueError as e:
+                return {'error': f'Failed to parse response as JSON. {e}'}
         return {}
-
-    @property
-    def ok(self):
-        return self.response.ok
 
 
 class Request:
+    __token = None
 
     @classmethod
-    def headers(cls, token):
+    def set_token(cls, token):
+        cls.__token = token
+
+    @classmethod
+    def headers(cls, token=None):
+        token = token or cls.__token
+        
         return {
-        'accept': 'application/json',
-        'content-type': 'application/json',
-        'authorization': f'Bearer {token}'
-    }
+            'accept': 'application/json',
+            'content-type': 'application/json',
+            'authorization': f'Bearer {token}'
+        }
 
     @classmethod
-    def get(cls, url, token):
-        return Response(requests.get(url, headers=cls.headers(token)))
+    def get(cls, url, token=None):
+        response = requests.get(url, headers=cls.headers(token))
+        response.raise_for_status()
+        return Response(response)
 
     @classmethod
-    def post(cls, url, token, data=None, json=None):
-        return Response(
-            requests.post(
-                url,
-                data=data,
-                json=json,
-                headers=cls.headers(token),
-            )
-        )
+    def post(cls, url, data=None, json=None, token=None):
+        response = requests.post(url, data=data, json=json, headers=cls.headers(token))
+        response.raise_for_status()
+        return Response(response)
 
     @classmethod
-    def patch(cls, url, token, data=None, json=None):
-        return Response(
-            requests.patch(
-                url,
-                data=data,
-                json=json,
-                headers=cls.headers(token),
-            )
-        )
+    def patch(cls, url, data=None, json=None, token=None):
+        response = requests.patch(url, data=data, json=json, headers=cls.headers(token))
+        response.raise_for_status()
+        return Response(response)
 
     @classmethod
     def build_url(cls, endpoint: str, api_url = API_URL, **query: dict):
