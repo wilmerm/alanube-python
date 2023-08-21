@@ -51,7 +51,8 @@ class Response:
 
 class Session:
     __token = None
-
+    __api_url = None
+    
     def __enter__(self):
         return self
 
@@ -59,12 +60,17 @@ class Session:
         Session.logout()
 
     @classmethod
-    def login(cls, token):
+    def login(cls, token, developer_mode=False):
         cls.__token = token
+        if developer_mode is True:
+            cls.__api_url = DEVELOPER_API_URL
+        else:
+            cls.__api_url = API_URL
 
     @classmethod
     def logout(cls):
         cls.__token = None
+        cls.__api_url = None
 
     @classmethod
     def is_authenticated(cls):
