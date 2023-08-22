@@ -16,17 +16,25 @@ pip install alanube
 
 ```py
 from alanube import AlanubeDGII
-from alanube.dgii.forms import InvoiceForm
+from alanube.dgii.forms import (
+    IdDocForm,
+    SenderForm,
+    BuyerForm,
+    TotalsForm,
+    ItemDetailForm,
+    ConfigForm,
+    InvoiceForm,
+)
 
-alanube = AlanubeDGII(token='YOUR_API_TOKEN')
+alanube = AlanubeDGII(token='YOUR_API_TOKEN', developer_mode=True)
 
 id_doc = IdDocForm(
     encf='E310000000005',
-    sequence_due_date: '2023-01-01',
-    tax_amount_indicator: 1,
-    income_type: 1,
-    payment_type: 1,
-    payment_deadline: '2023-01-30',
+    sequence_due_date='2023-01-01',
+    tax_amount_indicator=1,
+    income_type=1,
+    payment_type=1,
+    payment_deadline='2023-01-30',
 )
 
 sender = SenderForm(
@@ -39,7 +47,7 @@ sender = SenderForm(
     mail='mycompany@example.com',
     web_site='https://mycompany.example.com',
     seller_code='01',
-    internal_invoice_number='FC0123456789',
+    internal_invoice_number='123456789',
     stamp_date='2023-01-01',
 )
 
@@ -52,16 +60,16 @@ buyer = BuyerForm(
 )
 
 totals = TotalsForm(
-    total_amount=100.00,
-    total_taxed_amount=18.00,
-    amount_period=118.00,
+    total_amount=1180.00,
+    total_taxed_amount=1000,
+    amount_period=1000.00,
     non_billable_amount=0,
-    i1_amount_taxed=0, # No Facturable
-    i2_amount_taxed=100.00, # Monto gravado a ITBIS tasa1 (18%).
-    i3_amount_taxed=0, # Monto gravado a ITBIS tasa1 (16%).
+    i1_amount_taxed=1000.00, # Monto gravado a ITBIS tasa1 (18%).
+    i2_amount_taxed=0, # Monto gravado a ITBIS tasa2 (16%).
+    i3_amount_taxed=0, # Monto gravado a ITBIS tasa3 (0%).
     exempt_amount=0, # Monto exento.
-    itbis_total=18.00, # Total ITBIS
-    itbis1_total=18.00, # ITBIS (18%)
+    itbis_total=180.00, # Total ITBIS
+    itbis1_total=180.00, # ITBIS (18%)
     itbis2_total=0, # ITBIS (16%)
     itbis3_total=0, # ITBIS (0%)
     additional_tax_amount=None,
@@ -86,15 +94,23 @@ items = [
         subquantity_table=None,
         unit_price_item=100.00,
         discount_amount=0,
-        sub_discounts=0,
+        sub_discounts=[
+            SubDiscountForm(
+                sub_discount_rate='%',
+                sub_discount_percentage=10,
+            ),
+            SubDiscountForm(
+                sub_discount_rate='$',
+                sub_discount_percentage=5,
+            )
+        ],
         item_amount=1000.00,
     ),
-    ...
 ]
 
 config = ConfigForm()
 
-invoice_form = invoice_form_class(
+invoice_form = InvoiceForm(
     company_id='MY_ALANUBE_COMPANY_ID',
     id_doc=id_doc,
     sender=sender,

@@ -1360,7 +1360,7 @@ class InvoiceForm(Form):
                     f'El campo {self.totals.i1_amount_taxed=} no coincide con '
                     'la sumatoria de los valores del detalle gravado con tasa '
                     f'{ITEM_BILLING_INDICATORS[ITEM_BILLING_INDICATOR_1]} '
-                    'menos descuentos mas recargos.'
+                    f'menos descuentos mas recargos {self.items_i1_amount=}'
                 )
         # Total de la suma de valores de Ítems gravados asignados a ITBIS tasa 2
         # (tasa 16%), menos descuentos más recargos. Condicional a que en la

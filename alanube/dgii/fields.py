@@ -538,20 +538,20 @@ class ListFormField(Field):
         self.max_length = int(max_length) if max_length else None
 
     def parse_value(self, form: 'Form', name: str, value: List['Form']):
+        if not isinstance(value, (list, tuple)):
+            raise ValidationError(f'{form}.{name}. El valor "{value}" debe ser un listado de valores.')
         for form_instance in value:
             if not isinstance(form_instance, self.form_class):
-                raise ValidationError(
-                    f'El form {form_instance} en {self} debe ser un {self.form_class}.'
-                )
+                raise ValidationError(f'{form}.{name}. El form {form_instance} en {self} debe ser un {self.form_class}.')
         return value
 
     def validate(self, form: 'Form', name: str, value: List['Form']):
         value = super().validate(form, name, value)
         if value is not None:
             if self.min_length is not None and len(value) < self.min_length:
-                raise ValidationError(f"{form} {name} debe tener al menos {self.min_length} objetos.")
+                raise ValidationError(f"{form}.{name}. debe tener al menos {self.min_length} objetos.")
             if self.max_length is not None and len(value) > self.max_length:
-                raise ValidationError(f"{form} {name} debe tener como máximo {self.max_length} objetos.")
+                raise ValidationError(f"{form}.{name}. debe tener como máximo {self.max_length} objetos.")
         return value
 
 
