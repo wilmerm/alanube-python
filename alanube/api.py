@@ -28,7 +28,10 @@ class Response:
             try:
                 return self.json()
             except ValueError as e:
-                return {'error': f'Failed to parse response as JSON. {e}'}
+                try:
+                    self.response.raise_for_status()
+                except Exception as e:
+                    return {'error': str(e)}
         return {}
 
 
@@ -71,17 +74,14 @@ class Session:
 
     def get(self, url):
         response = requests.get(url, headers=self.headers)
-        response.raise_for_status()
         return Response(response)
 
     def post(self, url, data=None, json=None):
         response = requests.post(url, data=data, json=json, headers=self.headers)
-        response.raise_for_status()
         return Response(response)
 
     def patch(self, url, data=None, json=None):
         response = requests.patch(url, data=data, json=json, headers=self.headers)
-        response.raise_for_status()
         return Response(response)
 
     def build_url(self, endpoint: str, **query: dict):
