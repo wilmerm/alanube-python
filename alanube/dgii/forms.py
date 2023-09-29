@@ -26,6 +26,7 @@ from .config import (
     NUMBER_DEFAULT_MAX_VALUE,
     PAYMENT_ACCOUNT_TYPES,
     PAYMENT_METHODS,
+    PAYMENT_TYPE_CREDIT,
     PAYMENT_TYPES,
     UNIT_MEASURES,
     DollarSign,
@@ -314,6 +315,16 @@ class IdDocForm(Form):
         min_value=1,
         max_value=999,
     )
+
+    def validate(self, data: dict):
+        data = super().validate(data)
+
+        if self.payment_deadline and self.payment_type != PAYMENT_TYPE_CREDIT:
+            raise ValidationError({
+                'payment_deadline': f'La fecha límite de pago no está permitida cuando el tipo de pago no es {PAYMENT_TYPE_CREDIT}'
+            })
+
+        return data
 
 
 class SenderForm(Form):
