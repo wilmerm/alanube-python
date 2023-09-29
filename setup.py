@@ -12,7 +12,7 @@ install_requires = [
 # Setup configuration
 setup(
     name='alanube',
-    version='0.0.3',
+    version='0.0.4',
     author='Wilmer Martinez',
     author_email='info@wilmermartinez.dev',
     description='Library to establish connections with the Alanube API.',
