@@ -72,6 +72,7 @@ from .fields import (
     DateField,
     UnitMeasureField,
     EmailField,
+    PhoneField,
     FormField,
     ListField,
     ListFormField,
@@ -355,7 +356,7 @@ class SenderForm(Form):
     )
     phone_number = ListField(
         'TablaTelefonoEmisor',
-        field_class=StrField,
+        field_class=PhoneField,
         max_length=3,
     )
     mail = EmailField(
@@ -446,12 +447,8 @@ class BuyerForm(Form):
         'DireccionEntrega',
         max_length=100,
     )
-    additional_phone = StrField(
+    additional_phone = PhoneField(
         'TelefonoAdicional',
-        max_length=12,
-        validators=[
-            validate_phone_number,
-        ],
     )
     purchase_order_date = DateField(
         'FechaOrdenCompra',

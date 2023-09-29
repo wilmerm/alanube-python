@@ -6,6 +6,7 @@ from .exceptions import ValidationError
 from .utils import (
     validate_email,
     validate_ncf,
+    validate_phone_number,
     validate_rnc,
     validate_unit_measure,
 )
@@ -185,6 +186,38 @@ class EmailField(StrField):
         value = super().validate(form, name, value)
         if value is not None:
             value = validate_email(value)
+        return value
+
+
+class PhoneField(StrField):
+    """Campo que representa un número telefónico."""
+
+    def __init__(
+        self,
+        dgii_name: str | None = None,
+        null: bool = True,
+        max_length: int = 12,
+        choices: list | tuple | dict = None,
+        validators: list = None,
+        default: Any = NOT_IMPLEMENTED,
+        editable: bool = True,
+        help_text: str = None,
+    ):
+        super().__init__(
+            dgii_name=dgii_name,
+            null=null,
+            choices=choices,
+            max_length=max_length,
+            validators=validators,
+            default=default,
+            editable=editable,
+            help_text=help_text,
+        )
+
+    def validate(self, form: 'Form', name: str, value: Any):
+        value = super().validate(form, name, value)
+        if value is not None:
+            value = validate_phone_number(value)
         return value
 
 

@@ -54,16 +54,21 @@ def format_phone_number(number: str):
         >>> print(formatted_phone_number)
         809-555-4444
     """
-    # Eliminar caracteres especiales y no numéricos
-    number_clean = re.sub(r'\D', '', number)
-    # Aplicar el formato ###-###-####
-    formatted_number = re.sub(r'(\d{3})(\d{3})(\d{4})', r'\1-\2-\3', number_clean)
+   # Eliminar todos los caracteres no numéricos
+    digits = re.sub(r'\D', '', number)
+
+    # Verificar si la cadena resultante contiene 10 dígitos
+    if len(digits) != 10:
+        raise ValueError("El número de teléfono debe contener 10 dígitos numéricos.")
+
+    # Formatear la cadena en el formato deseado
+    formatted_number = f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+
     return formatted_number
 
 
 def validate_phone_number(number: str):
-    clean_number = format_phone_number(number)
-    return clean_number
+    return format_phone_number(number)
 
 
 def get_credit_note_indicator(date: datetime.date):
