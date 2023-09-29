@@ -580,8 +580,86 @@ class TotalsAdditionalTaxForm(Form):
 
 
 class TotalsForm(Form):
+    """
+    Totales para `InvoiceForm` y `CreditNoteForm`. Campo DGII <Totales>.
+
+    ## Attrs:
+    - `total_taxed_amount`: DecimalField - Total de la suma de valores de monto
+    gravado ITBIS a diferentes tasas.
+
+    - `i1_amount_taxed`: DecimalField - Total de la suma de valores de Ítems
+    gravados asignados a ITBIS tasa 1 (tasa 18%).
+
+    - `i2_amount_taxed`: DecimalField - Total de la suma de valores de Ítems
+    gravados asignados a ITBIS tasa 2 (tasa 16%).
+
+    - `i3_amount_taxed`: DecimalField - Total de la suma de valores de Ítems
+    gravados asignados a ITBIS tasa 3 (tasa 0%).
+
+    - `exempt_amount`: DecimalField - Total de la suma de valores de ítems exentos.
+
+    - `itbis_s1`: IntField - Tasa de ITBIS 1 (18%).
+
+    - `itbis_s2`: IntField - Tasa de ITBIS 2 (16%).
+
+    - `itbis_s3`: IntField - Tasa de ITBIS 3 (0%).
+
+    - `itbis_total`: DecimalField - Total de la suma de valores de ITBIS a
+    diferentes tasas.
+
+    - `itbis1_total`: DecimalField - Valor numérico igual a Monto Gravado ITBIS
+    Tasa1 por la Tasa ITBIS 1.
+
+    - `itbis2_total`: DecimalField - Valor numérico igual a Monto Gravado ITBIS
+    Tasa2 por la Tasa ITBIS 2.
+
+    - `itbis3_total`: DecimalField - Valor numérico igual a Monto gravado ITBIS
+    Tasa3 por la Tasa ITBIS 3.
+
+    - `additional_tax_amount`: DecimalField - Sumatoria de los campos Monto
+    Impuesto Selectivo al Consumo Específico, Monto Impuesto Selectivo Ad
+    Valorem y Monto Otros Impuestos Adicionales.
+
+    - `additional_taxes`: ListFormField - Lista de impuestos adicionales que se
+    pueden incluir.
+
+    - `total_amount`: DecimalField - Monto Gravado Total + Monto exento +Total
+    ITBIS + Monto del Impuesto adicional.
+
+    - `non_billable_amount`: DecimalField - Total de la suma de montos de bienes
+    o servicios con Indicador de facturación=0.
+
+    - `amount_period`: DecimalField - Total de la suma de Monto Total y Monto no
+    Facturable.
+
+    - `previous_balance`: DecimalField - Saldo Anterior.
+
+    - `amount_advance_payment`: DecimalField - Pago parcial por adelantado de la
+    factura que se emite.
+
+    - `pay_value`: DecimalField - Valor cobrado.
+
+    - `itbis_total_retained`: DecimalField - Total de ITBIS retenido.
+
+    - `isr_total_retention`: DecimalField - Monto del Impuesto Sobre la Renta
+    correspondiente a la retención realizada de la prestación o locación de
+    servicios. Condicional a que en la línea de detalle exista retención.
+
+    - `itbis_total_perception`: DecimalField - Monto del ITBIS que el
+    contribuyente cobra a terceros como adelanto del impuesto que éste percibirá
+    en sus operaciones. Condicional a que en la línea de detalle exista percepción.
+
+    - `isr_total_perception`: DecimalField - Monto del Impuesto Sobre la Renta
+    que el contribuyente cobra a terceros como adelanto del impuesto que éste
+    percibirá en sus operaciones. Condicional a que en la línea de detalle
+    exista percepción.
+    """
+
     total_taxed_amount: Decimal = DecimalField(
         'MontoGravadoTotal',
+        help_text='Total de la suma de valores de monto gravado ITBIS a '
+        'diferentes tasas. Condicional a que exista Monto gravado1, y/o Monto '
+        'gravado 2 y/o Monto gravado 3.'
     )
     i1_amount_taxed: Decimal = DecimalField(
         'MontoGravadoI1',
@@ -591,77 +669,133 @@ class TotalsForm(Form):
     )
     i2_amount_taxed: Decimal = DecimalField(
         'MontoGravadoI2',
+        help_text='Total de la suma de valores de Ítems gravados asignados a '
+        'ITBIS tasa 2(tasa 16%), menos descuentos más recargos. Condicional a '
+        'que en la línea de detalle exista algún ítem gravado a tasa ITBIS2.'
     )
     i3_amount_taxed: Decimal = DecimalField(
         'MontoGravadoI3',
+        help_text='Total de la suma de valores de Ítems gravados asignados a '
+        'ITBIS tasa 3 (tasa 0%), menos descuentos más recargos. Condicional a '
+        'que en la línea de detalle exista algún ítem gravado a tasa ITBIS3.'
     )
     exempt_amount: Decimal = DecimalField(
         'MontoExento',
+        help_text='Total de la suma de valores de ítems exentos, menos '
+        'descuentos más recargos. Condicional a que en la línea de detalle '
+        'exista algún ítem exento.'
     )
     itbis_s1: int = IntField(
         'ITBIS1',
         max_value=99,
         default=ITEM_BILLING_INDICATORS[ITEM_BILLING_INDICATOR_1],
+        help_text='Tasa de ITBIS 1 (18%). Condicional a que en la línea de '
+        'detalle exista ítem gravado a tasa 1.'
     )
     itbis_s2: int = IntField(
         'ITBIS2',
         max_value=99,
         default=ITEM_BILLING_INDICATORS[ITEM_BILLING_INDICATOR_2],
+        help_text='Tasa de ITBIS 2 (16%). Condicional a que en la línea de '
+        'detalle exista ítem gravado a tasa 2.'
     )
     itbis_s3: int = IntField(
         'ITBIS3',
         max_value=99,
         default=ITEM_BILLING_INDICATORS[ITEM_BILLING_INDICATOR_3],
+        help_text='Tasa de ITBIS 3 (0%). Condicional a que en la línea de '
+        'detalle exista ítem gravado a tasa 3.'
     )
     itbis_total: Decimal = DecimalField(
         'TotalITBIS',
+        help_text='Total de la suma de valores de ITBIS a diferentes tasas. '
+        'Condicional a que exista Total ITBIS Tasa 1, y/o Total ITBIS Tasa 2 '
+        'y/o Total ITBIS Tasa 3.'
     )
     itbis1_total: Decimal = DecimalField(
         'TotalITBIS1',
+        help_text='Valor numérico igual a Monto Gravado ITBIS Tasa1 por la '
+        'Tasa ITBIS 1. Condicional a que exista Monto Gravado tasa 1 y tasa '
+        'ITBIS 1. Si existen impuestos selectivos al consumo que formen parte '
+        'de la base imponible del ITBIS, estos se sumaran al monto gravado '
+        'antes de multiplicarlo por la tasa de ITBIS.'
     )
     itbis2_total: Decimal = DecimalField(
         'TotalITBIS2',
+        help_text='Valor numérico igual a Monto Gravado ITBIS Tasa2*tasa ITBIS 2. '
+        'Condicional a que exista Monto Gravado tasa 2 y tasa ITBIS 2.'
     )
     itbis3_total: Decimal = DecimalField(
         'TotalITBIS3',
+        help_text='Valor numérico igual a Monto gravado ITBIS Tasa3*tasa ITBIS 3. '
+        'Condicional a que exista Monto Gravado tasa 3 y tasa ITBIS 3.'
     )
     additional_tax_amount: Decimal = DecimalField(
         'MontoImpuestoAdicional',
+        help_text='Sumatoria de los campos Monto Impuesto Selectivo al Consumo '
+        'Específico, Monto Impuesto Selectivo Ad Valorem y Monto Otros '
+        'Impuestos Adicionales.'
     )
     additional_taxes: List[TotalsAdditionalTaxForm] = ListFormField(
         'ImpuestosAdicionales',
         form_class=TotalsAdditionalTaxForm,
         max_length=20,
+        help_text='Se pueden incluir 20 repeticiones de pares código - valor.'
     )
     total_amount: Decimal = DecimalField(
         'MontoTotal',
+        help_text='Monto Gravado Total + Monto exento +Total ITBIS + Monto del '
+        'Impuesto adicional.'
     )
     non_billable_amount: Decimal = DecimalField(
         'MontoNoFacturable',
+        help_text='Total de la suma de montos de bienes o servicios con '
+        'Indicador de facturación=0. Condicional a que en la línea de detalle '
+        'exista algún ítem con indicador facturación igual a cero (0).'
     )
     amount_period: Decimal = DecimalField(
         'MontoPeriodo',
+        help_text='Total de la suma de Monto Total y Monto no Facturable.'
     )
     previous_balance: Decimal = DecimalField(
         'SaldoAnterior',
+        help_text='Saldo Anterior. Se incluye sólo con fines de ilustrar con '
+        'claridad el cobro.'
     )
     amount_advance_payment: Decimal = DecimalField(
         'MontoAvancePago',
+        help_text='Pago parcial por adelantado de la factura que se emite.'
     )
     pay_value: Decimal = DecimalField(
         'ValorPagar',
+        help_text='Valor cobrado.'
     )
+
+    # Campos únicamente para `CreditNoteForm`.
+
     itbis_total_retained: Decimal = DecimalField(
         'TotalITBISRetenido',
+        help_text='Monto del ITBIS correspondiente a la retención que será '
+        'realizada por el comprador. Condicional a que en la línea de detalle '
+        'exista retención.'
     )
     isr_total_retention: Decimal = DecimalField(
         'TotalISRRetencion',
+        help_text='Monto del Impuesto Sobre la Renta correspondiente a la '
+        'retención realizada de la prestación o locación de servicios. '
+        'Condicional a que en la línea de detalle exista retención.'
     )
     itbis_total_perception: Decimal = DecimalField(
         'TotalITBISPercepcion',
+        help_text='Monto del ITBIS que el contribuyente cobra a terceros como '
+        'adelanto del impuesto que éste percibirá en sus operaciones. '
+        'Condicional a que en la línea de detalle exista percepción.'
     )
     isr_total_perception: Decimal = DecimalField(
         'TotalISRPercepcion',
+        help_text='Monto del Impuesto Sobre la Renta que el contribuyente '
+        'cobra a terceros como adelanto del impuesto que éste percibirá en sus '
+        'operaciones. Condicional a que en la línea de detalle exista percepción.'
     )
 
     def validate_total_amount(self, total_amount: Decimal, data: dict):
