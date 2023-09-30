@@ -808,8 +808,9 @@ class TotalsForm(Form):
 
         if not compare_amounts_with_margin(total_amount, total_amount_sum):
             raise ValidationError(
-                f'El valor de {total_amount=} no es igual a la sumatoria de '
-                f'{total_taxed_amount=}, {exempt_amount=}, {itbis_total=} y {additional_tax_amount=}.'
+                f'El valor de {total_amount=} no es igual a {total_amount_sum=}, '
+                f'lo cual es la sumatoria de {total_taxed_amount=}, '
+                f'{exempt_amount=}, {itbis_total=} y {additional_tax_amount=}.'
             )
 
         return total_amount
@@ -822,7 +823,8 @@ class TotalsForm(Form):
         i3_amount_taxed = self.i3_amount_taxed or 0
         itbis123_totals = sum((i1_amount_taxed, i2_amount_taxed, i3_amount_taxed))
 
-        if total_taxed_amount != None and total_taxed_amount != itbis123_totals:
+
+        if total_taxed_amount != None and not compare_amounts_with_margin(total_taxed_amount, itbis123_totals):
             raise ValidationError(
                 f'La sumatoria de los valores {i1_amount_taxed=} + {i2_amount_taxed=} + {i3_amount_taxed=} '
                 f'no coinciden con el valor de {total_taxed_amount=}.'
