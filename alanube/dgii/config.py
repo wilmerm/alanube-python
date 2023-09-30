@@ -1,3 +1,4 @@
+from pathlib import Path
 
 from ..config import *
 
@@ -927,3 +928,6 @@ PROVINCES_AND_MUNICIPALITIES = {
         }
     }
 }
+
+
+IMG_DGII = str(Path('dgii/assets/img/logo_dgii.svg').resolve())
