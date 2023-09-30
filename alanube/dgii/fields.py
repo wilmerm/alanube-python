@@ -539,7 +539,16 @@ class ListField(Field):
         for _value in value:
             field = self.field_class()
             _value = field.validate(form, name, _value)
-            validate_values.append(_value)
+
+            # Solo se incluyen los items con valores
+            if _value is not None:
+                validate_values.append(_value)
+
+        if self.min_length is not None and len(validate_values) < self.min_length:
+            raise ValidationError(f"{form}.{name}. debe tener al menos {self.min_length} valores.")
+        if self.max_length is not None and len(validate_values) > self.max_length:
+            raise ValidationError(f"{form}.{name}. debe tener como máximo {self.max_length} valores.")
+
         return validate_values
 
 
