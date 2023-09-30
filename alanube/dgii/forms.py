@@ -1028,14 +1028,59 @@ class TaxForm(Form):
 
 
 class ItemDetailForm(Form):
+    """
+    Formulario para detalles de ítems.
+
+    Este formulario se utiliza para capturar información detallada sobre un ítem,
+    incluyendo su nombre, cantidad, unidad de medida, precios, descuentos, recargos,
+    impuestos y más.
+
+    Atributos:
+        - `line_number` (int): Número de línea que numera el ítem.
+        - `item_code_table` (List[ItemCodeForm]): Tabla de códigos asociados al ítem.
+        - `billing_indicator` (int): Indicador de facturación que determina si el ítem es exento,
+            gravado o no facturable.
+        - `retention` (RetentionForm): Información sobre retenciones asociadas al ítem.
+        - `item_name` (str): Nombre del producto o servicio.
+        - `good_service_indicator` (int): Indica si el ítem corresponde a Bien (1) o Servicio (2).
+        - `item_description` (str): Descripción adicional del ítem.
+        - `quantity_item` (Decimal): Cantidad del ítem.
+        - `unit_measure` (int): Unidad de medida en la que se expresa la cantidad.
+        - `quantity_reference` (Decimal): Cantidad para la unidad de medida de referencia.
+        - `reference_unit` (int): Unidad de medida de referencia.
+        - `subquantity_table` (List[SubquantityForm]): Tabla de subcantidades para impuestos selectivos.
+        - `degrees_alcohol` (Decimal): Porcentaje de alcohol en bebidas alcohólicas.
+        - `unit_price_reference` (Decimal): Precio unitario de referencia.
+        - `elaboration_date` (datetime.date): Fecha de elaboración del ítem.
+        - `expiration_date_item` (datetime.date): Fecha de vencimiento del ítem.
+        - `unit_price_item` (Decimal): Precio unitario del ítem.
+        - `discount_amount` (Decimal): Monto total de descuentos otorgados al ítem.
+        - `sub_discounts` (List[SubDiscountForm]): Tabla de subdescuentos.
+        - `surcharge_amount` (Decimal): Monto total de recargos otorgados al ítem.
+        - `sub_surcharge` (List[SubSurchargeForm]): Tabla de subrecargos.
+        - `additional_taxes` (List[TaxForm]): Lista de códigos de impuesto adicionales.
+        - `other_currency_detail` (OtherCurrencyDetailForm): Detalles en otra moneda.
+        - `item_amount` (Decimal): Monto total del ítem calculado como
+            (Precio Unitario * Cantidad) - Monto Descuento + Monto Recargo.
+
+    Métodos:
+        - `__init__(self, **kwargs)`: Constructor de la clase.
+        - `get_item_amount(self) -> Decimal`: Calcula el monto total del ítem.
+        - `get_item_amount_without_discount(self) -> Decimal`: Calcula el monto del ítem sin descuento.
+
+    """
     line_number: int = IntField(
         'NumeroLinea',
         null=False,
+        min_value=1,
+        max_value=1000,
+        help_text='Línea que numera el ítem.'
     )
     item_code_table: List[ItemCodeForm] = ListFormField(
         'TablaCodigosItem',
         form_class=ItemCodeForm,
         max_length=5,
+        help_text='Se pueden incluir 5 repeticiones de pares código - valor.'
     )
     billing_indicator: int = IntField(
         'IndicadorFacturacion',
@@ -1043,16 +1088,19 @@ class ItemDetailForm(Form):
         max_value=4,
         validators=[
             validate_item_billing_indicator,
-        ]
+        ],
+        help_text='Indica si el ítem es exento, si es gravado, o No facturable.'
     )
     retention: RetentionForm = FormField(
         'Retencion',
         form_class=RetentionForm,
+        help_text='Retención'
     )
     item_name: str = StrField(
         'NombreItem',
         null=False,
         max_length=80,
+        help_text='Nombre del producto o servicio.'
     )
     good_service_indicator: int = IntField(
         'IndicadorBienoServicio',
@@ -1061,91 +1109,128 @@ class ItemDetailForm(Form):
         max_value=2,
         validators=[
             validate_item_good_service_indicator,
-        ]
+        ],
+        help_text='Identifica si el ítem corresponde a Bien (1) o Servicio (2).'
     )
     item_description: str = StrField(
         'DescripcionItem',
         max_length=1000,
+        help_text='Descripción Adicional del ítem.'
     )
     quantity_item: Decimal = DecimalField(
         'CantidadItem',
         null=False,
+        help_text='Cantidad del ítem'
     )
     unit_measure: int = UnitMeasureField(
         'UnidadMedida',
+        help_text='Indica la unidad de medida que está expresada la cantidad.'
     )
     quantity_reference: Decimal = DecimalField(
         'CantidadReferencia',
+        help_text='Cantidad para la unidad de medida de referencia (no se usa '
+        'para el cálculo del Monto Ítem). Condicional a que el ítem esté '
+        'gravado con códigos de impuestos adicionales entre 006-022 en la '
+        'Tabla de Codificación Tipo de Impuestos Adicional.'
     )
     reference_unit: int = UnitMeasureField(
         'UnidadReferencia',
+        help_text='Indica la unidad de medida de referencia. '
+        'Condicional a que esté completado el campo Cantidad de referencia.'
     )
     subquantity_table: List[SubquantityForm] = ListFormField(
         'TablaSubcantidad',
         form_class=SubquantityForm,
         max_length=5,
+        help_text='Se deberá incluir esta tabla para fines del cálculo de los '
+        'impuestos selectivos al consumo a productos derivados de alcohol y '
+        'cervezas y productos del tabaco y cigarrillos. Condicional a que '
+        'exista código desde 006 hasta 039 según la ‘Tabla de Codificación '
+        'Tipos de Impuestos Adicionales’. Se pueden incluir 5 repeticiones de '
+        'pares cantidad - código.'
     )
     degrees_alcohol: Decimal = DecimalField(
         'GradosAlcohol',
         max_value=999.99,
+        help_text='Corresponde al porcentaje de alcohol en el volumen de '
+        'concentración total alcohólica por unidad de producto. Condicional a '
+        'que el ítem esté gravado con códigos de impuestos adicionales 006 '
+        'hasta 018 en la Tabla de Codificación Tipo de Impuestos Adicional '
+        '(bebidas alcohólicas).'
     )
     unit_price_reference: Decimal = DecimalField(
         'PrecioUnitarioReferencia',
+        help_text='Precio unitario para la unidad de medida de referencia '
+        '(no se usa para el cálculo del monto Total). Condicional a que el '
+        'ítem esté gravado con códigos de impuestos adicionales desde 023 '
+        'hasta 039 en la Tabla de Codificación Tipo de Impuestos Adicional.'
     )
     elaboration_date: datetime.date = DateField(
         'FechaElaboracion',
+        help_text='Dato correspondiente a la fecha de elaboración del ítem.'
     )
     expiration_date_item: datetime.date = DateField(
         'FechaVencimientoItem',
+        help_text='Dato correspondiente a la fecha de vencimiento del ítem.'
     )
     unit_price_item: Decimal = DecimalField(
         'PrecioUnitarioItem',
         null=False,
         max_digits=20,
         decimal_places=4,
+        help_text='Dato correspondiente al precio unitario del ítem.'
     )
     discount_amount: Decimal = DecimalField(
         'DescuentoMonto',
+        help_text='Totaliza todos los subdescuentos otorgados al ítem en '
+        'montos. Condicional a que exista Monto Subdescuento.'
     )
     sub_discounts: List[SubDiscountForm] = ListFormField(
         'TablaSubDescuento',
         form_class=SubDiscountForm,
         max_length=12,
+        help_text='Condicional a que exista descuento en el ítem. Se pueden '
+        'incluir 12 repeticiones.'
     )
     surcharge_amount: Decimal = DecimalField(
         'RecargoMonto',
+        help_text='Totaliza todos los Subrecargos otorgados al ítem en montos. '
+        'Condicional a que exista Monto Subrecargo.'
     )
     sub_surcharge: List[SubSurchargeForm] = ListFormField(
         'TablaSubRecargo',
         form_class=SubSurchargeForm,
         max_length=12,
+        help_text='Condicional a que exista recargo en el ítem. '
+        'Se pueden incluir 12 repeticiones de pares Tipo - Valor.'
     )
     additional_taxes: List[TaxForm] = ListFormField(
         'TablaImpuestoAdicional',
         form_class=TaxForm,
         max_length=2,
+        help_text='Se pueden incluir 2 repeticiones de códigos de impuesto.'
     )
     other_currency_detail: OtherCurrencyDetailForm = FormField(
         'TablaSubcantidad',
         form_class=OtherCurrencyDetailForm,
+        help_text='Otra moneda detalle. Indicar precios en monedas alternativas.'
     )
     item_amount: Decimal = DecimalField(
         'MontoItem',
+        help_text='(Precio Unitario del ítem * Cantidad) - Monto Descuento + Monto Recargo'
     )
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.item_amount = self.get_item_amount()
+        self.item_amount = self.item_amount or self.get_item_amount()
 
     def get_item_amount(self) -> Decimal:
         """Obtiene (Precio Unitario * Cantidad) - Monto Descuento + Monto Recargo."""
-        return (
-            self.get_item_amount_without_discount() -
-            (
-                (self.discount_amount or 0) +
-                (self.surcharge_amount or 0)
-            )
-        )
+        amount_without_discount = self.get_item_amount_without_discount()
+        discount = self.discount_amount or 0
+        surcharge_amount = self.surcharge_amount or 0
+        amount = amount_without_discount - discount + surcharge_amount
+        return amount
 
     def get_item_amount_without_discount(self) -> Decimal:
         """Obtiene (Precio Unitario * Cantidad)."""
