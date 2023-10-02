@@ -1,4 +1,5 @@
 
+from typing import List, Tuple
 from .api import Session
 from . import dgii
 
@@ -10,6 +11,38 @@ class Alanube:
 
 
 class AlanubeDGII(Alanube):
+
+    def create_simple_cancellations(self, rnc_sender: int, sequences: List[Tuple[str, str]]):
+        """
+        Crea una cancelacción de NCF de manera simple.
+
+        Args:
+        ---------
+        * `rnc_sender` (int): Corresponde al Número de Registro Nacional del
+            contribuyente que emite la factura electrónica.
+        * `sequences` (List[Tuple[str, str]]): Una lista de rangos
+            (secuencia_inicial, secuencia_final) de los comprobantes que se van a anular.
+
+        Returns:
+        ---------
+        (CancellationForm, Response): Retorna una tupla.
+
+        Example:
+        ---------
+        >>> create_simple_cancellation(
+            rnc_sender='132000000',
+            sequences=[
+                ('E310000000001', 'E310000000010'),
+                ('E320000000004', 'E310000000005'),
+            ]
+        )
+        (CancellationForm, Response)
+
+        """
+        form = dgii.create_simple_cancellations_form(rnc_sender, sequences)
+        url = self.get_cancellations_url()
+        response = self.session.post(url, json=form.data)
+        return (form, dgii.Cancellation(response))
 
     def create_invoice(self, form: dgii.forms.InvoiceForm | dgii.forms.CreditNoteForm):
         """Create an invoice
@@ -35,6 +68,9 @@ class AlanubeDGII(Alanube):
         url = self.get_url_from_encf(encf) + f'/{status_id}'
         res = self.session.get(url)
         return dgii.InvoiceStatus(res)
+
+    def get_cancellations_url(self):
+        return self.session.build_url('cancellations')
 
     def get_url_from_encf(self, encf: str):
         endpoint = self.get_endpoint_from_ncf(encf)
