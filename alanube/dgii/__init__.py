@@ -117,7 +117,7 @@ class Cancellation(Resource):
     def create(cls, form: CancellationForm):
         """
         Returns:
-            ```
+            ```json
             {
                 "id": "01H22Z1JS88EWQCB4HZ9499TZ3",
                 "stampDate": "1990-12-31",
@@ -143,7 +143,7 @@ class CancellationStatus(Resource):
     pass
 
 
-def create_simple_cancellation(rnc_sender: int, sequences: List[Tuple[str, str]]):
+def create_simple_cancellations_form(rnc_sender: int, sequences: List[Tuple[str, str]]):
     """
     Crea una cancelacción de NCF de manera simple.
 
@@ -167,7 +167,7 @@ def create_simple_cancellation(rnc_sender: int, sequences: List[Tuple[str, str]]
             ('E320000000004', 'E310000000005'),
         ]
     )
-    (CancellationForm, Response)
+    CancellationForm(...)
 
     """
     cancelled_encf_quantity = 0
@@ -204,8 +204,7 @@ def create_simple_cancellation(rnc_sender: int, sequences: List[Tuple[str, str]]
         cancellations=items,
     )
 
-    response = Cancellation.create(cancellation_form)
-    return (cancellation_form, response)
+    return cancellation_form
 
 
 class DirectoryAndStatus(Resource):
