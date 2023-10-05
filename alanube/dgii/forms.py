@@ -88,35 +88,38 @@ class Form:
     dgii_name = None
 
     def __init__(self, **kwargs):
-        for name, attr in self.__class__.__dict__.items():
-            if not isinstance(attr, Field):
-                continue
+        class_list = list(self.__class__.__bases__) + [self.__class__]
+        print(self, class_list)
+        for cls in class_list:
+            for name, attr in cls.__dict__.items():
+                if name.startswith('__') or not isinstance(attr, Field):
+                    continue
 
-            field: Field = attr
+                field: Field = attr
 
-            try:
-                value = kwargs[name]
-            except KeyError:
-                # El campo tiene un valor default.
-                if field.default != NOT_IMPLEMENTED:
-                    value = field.get_default(self)
-                # El campo puede ser nulo.
-                elif field.null:
-                    value = None
-                # No se indicó el campo en los parámetros (y es obligatorio).
-                else:
-                    raise AttributeError(
-                        f'No se indicó un valor para el campo {name} en {self}.'
-                    )
+                try:
+                    value = kwargs[name]
+                except KeyError:
+                    # El campo tiene un valor default.
+                    if field.default != NOT_IMPLEMENTED:
+                        value = field.get_default(self)
+                    # El campo puede ser nulo.
+                    elif field.null:
+                        value = None
+                    # No se indicó el campo en los parámetros (y es obligatorio).
+                    else:
+                        raise AttributeError(
+                            f'No se indicó un valor para el campo {name} en {self}.'
+                        )
 
-            if value == None and not field.null:
-                raise AttributeError(f'El campo {name} no puede ser nulo.')
+                if value == None and not field.null:
+                    raise AttributeError(f'El campo {name} no puede ser nulo.')
 
-            if value != None:
-                value = self.__apply_field_validation(field, name, value)
+                if value != None:
+                    value = self.__apply_field_validation(field, name, value)
 
-            field.parent = self
-            setattr(self, name, value)
+                field.parent = self
+                setattr(self, name, value)
 
     def __str__(self):
         return self.__class__.__name__.replace('Form', '')
@@ -1664,37 +1667,24 @@ class InvoiceForm(Form):
         ])
 
 
+class DebitNoteIdDocForm(IdDocForm):
+    pass
+
+
+class DebitNoteForm(InvoiceForm):
+    """
+    Nota de Crédito Electrónica (34).
+
+    https://developer.alanube.co/v1.0-DOM/reference/createcreditnotes
+    """
+    id_doc: DebitNoteIdDocForm = FormField(
+        'IdDoc',
+        null=False,
+        form_class=DebitNoteIdDocForm,
+    )
+
 
 class CreditNoteIdDocForm(IdDocForm):
-    """
-    idDoc Form para CreditNoteForm.
-
-    Args:
-    * `company_id` (str): Identificador de la empresa.
-    * `id_doc` (IdDocForm): Documento de identificación.
-    * `sender` (SenderForm): Formulario del remitente.
-    * `buyer` (BuyerForm): Formulario del comprador.
-    * `additional_information` (AdditionalInformationForm, opcional): Información adicional.
-    * `transport` (TransportForm, opcional): Formulario de transporte.
-    * `totals` (TotalsForm): Formulario de totales.
-    * `other_currency` (OtherCurrencyForm, opcional): Formulario de otra moneda.
-    * `item_details` (List[ItemDetailForm]): Detalles de los elementos.
-    * `subtotals` (List[SubtotalForm], opcional): Subtotales.
-    * `discounts_or_surcharges` (List[DiscountsOrSurchargeForm], opcional): Descuentos o recargos.
-    * `pagination` (List[PaginationForm], opcional): Paginación.
-    * `information_reference` (InformationReferenceForm, opcional): Información de referencia.
-    * `config` (ConfigForm, opcional): Configuración.
-    * `encf` (str):
-    * `deferred_delivery_indicator` (int):
-    * `tax_amount_indicator` (int):
-    * `income_type` (int):
-    * `payment_type` (int):
-    * `payment_deadline` (datetime.date):
-    * `date_from` (datetime.date):
-    * `date_until` (datetime.date):
-    * `total_pages` (int):
-    * `credit_note_indicator` (int):
-    """
     sequence_due_date = None
     payment_term = None
     payment_forms_table = None
