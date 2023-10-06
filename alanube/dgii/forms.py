@@ -1,7 +1,7 @@
 
 import datetime
 from decimal import Decimal
-from typing import Any, Dict, List, Tuple, Type
+from typing import Any, Dict, List, Tuple, Type, Callable
 import logging
 
 from .exceptions import ValidationError
@@ -133,17 +133,28 @@ class Form:
         return value
 
     @property
+    def json(self):
+        return self.data
+
+    @property
     def data(self):
         return self.get_data()
 
-    def get_data(self, allow_null: bool = False, allow_blank: bool = False):
+    def get_data(
+        self,
+        allow_null: bool = False,
+        allow_blank: bool = False,
+        parser: Callable = None,
+    ):
         """
         Obtiene los datos del objeto y los devuelve en forma de diccionario.
 
         Args:
             * `allow_null` (bool, optional): Permitir valores nulos.
             * `allow_blank` (bool, optional): Permitir string vacios.
+            * `parser` (Callable, optional): Permite indicar un custom parser.
         """
+        parser = parser or self._default_parser
         validated_data = self.validate(vars(self))
         data = {}
         for name in validated_data:
@@ -162,7 +173,7 @@ class Form:
             if value == '' and allow_blank is False:
                 continue
 
-            value = self.__parse(field, name, value)
+            value = parser(field, name, value)
 
             # Convertir el nombre a CamelCase
             name_camel_case = to_camel_case(name)
@@ -172,10 +183,18 @@ class Form:
     def validate(self, data: dict):
         return data
 
-    def __parse(self, field: Field, name: str, value: Any):
+    def _default_parser(
+        self,
+        field: Field,
+        name: str,
+        value: Any,
+        deep_parser: Callable = None,
+    ):
+        deep_parser = deep_parser or self._default_parser
+
         # Obtener los datos del objeto Form recursivamente
         if isinstance(value, Form):
-            value = value.get_data()
+            value = value.get_data(parser=deep_parser)
 
         # Convertir fechas y datetime a formato ISO
         elif isinstance(value, (datetime.date, datetime.datetime)):
@@ -183,14 +202,14 @@ class Form:
                 value = value.date()
             value = value.isoformat()
 
-        # Convertir valores float a Decimal
+        # Convertir valores Decimal a float
         elif isinstance(value, (float, Decimal)):
             decimal_places = field.decimal_places if field.decimal_places else 2
-            value = Decimal(str(value)) if isinstance(value, float) else value
+            value = float(str(value)) if isinstance(value, Decimal) else value
             value = round(value, decimal_places) # FIXME: La cantidad de decimales puede variar, hay algunos que llevan 4.
 
         elif isinstance(value, (list, tuple)):
-            value = [self.__parse(field, name, v) for v in value]
+            value = [deep_parser(field, name, v) for v in value]
 
         return value
 

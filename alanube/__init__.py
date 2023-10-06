@@ -41,7 +41,7 @@ class AlanubeDGII(Alanube):
         """
         form = dgii.create_simple_cancellations_form(rnc_sender, sequences)
         url = self.get_cancellations_url()
-        response = self.session.post(url, json=form.data)
+        response = self.session.post(url, json=form.json)
         return (form, dgii.Cancellation(response))
 
     def create_invoice(self, form: dgii.forms.InvoiceForm | dgii.forms.CreditNoteForm):
@@ -60,7 +60,7 @@ class AlanubeDGII(Alanube):
         """
         encf = form.id_doc.encf
         url = self.get_url_from_encf(encf)
-        response = self.session.post(url, json=form.data)
+        response = self.session.post(url, json=form.json)
         return dgii.Invoice(response)
 
     def check_status(self, encf: str, status_id: str):
