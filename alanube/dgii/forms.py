@@ -89,7 +89,7 @@ class Form:
 
     def __init__(self, **kwargs):
         class_list = list(self.__class__.__bases__) + [self.__class__]
-        print(self, class_list)
+
         for cls in class_list:
             for name, attr in cls.__dict__.items():
                 if name.startswith('__') or not isinstance(attr, Field):
@@ -822,7 +822,6 @@ class TotalsForm(Form):
     )
 
     def validate_total_amount(self, total_amount: Decimal, data: dict):
-        total_amount = Decimal(total_amount)
         total_taxed_amount = self.total_taxed_amount or 0
         exempt_amount = self.exempt_amount or 0
         itbis_total = self.itbis_total or 0
@@ -857,7 +856,6 @@ class TotalsForm(Form):
     def validate_itbis_total(self, itbis_total: Decimal | None, data: dict):
         if not itbis_total:
             return None
-        itbis_total = Decimal(itbis_total)
 
         # Total de la suma de valores de ITBIS a diferentes tasas. Condicional a
         # que exista Total ITBIS Tasa 1, y/o Total ITBIS Tasa 2 y/o Total ITBIS Tasa 3.

@@ -78,12 +78,14 @@ class Field:
         # Obtenemos un valor de otro atributo del formulario.
         if isinstance(self.default, Attr):
             return getattr(form, self.default.name)
+
         # Intentamos tratar el valor default como un método.
         if callable(self.default):
             try:
                 return self.default(form)
             except:
                 return self.default()
+
         # El valor es literal, lo devolvemos tal cual.
         return self.default
 
@@ -374,8 +376,8 @@ class DecimalField(IntField):
     def validate(self, form: 'Form', name: str, value: Decimal):
         value = super().validate(form, name, value)
         if value is not None:
-            if self.decimal_places:
-                value = round(value, self.decimal_places)
+            # if self.decimal_places:
+            #     value = round(value, self.decimal_places)
             if self.min_value is not None and value < self.min_value:
                 raise ValidationError(f"{name} debe ser mayor o igual a {self.min_value}.")
             if self.max_value is not None and value > self.max_value:
