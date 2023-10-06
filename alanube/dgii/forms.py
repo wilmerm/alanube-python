@@ -183,10 +183,11 @@ class Form:
                 value = value.date()
             value = value.isoformat()
 
-        # Convertir valores Decimal a float (y reducir los decimales)
+        # Convertir valores float a Decimal
         elif isinstance(value, (float, Decimal)):
             decimal_places = field.decimal_places if field.decimal_places else 2
-            value = round(float(value), decimal_places) # FIXME: La cantidad de decimales puede variar, hay algunos que llevan 4.
+            value = Decimal(str(value)) if isinstance(value, float) else value
+            value = round(value, decimal_places) # FIXME: La cantidad de decimales puede variar, hay algunos que llevan 4.
 
         elif isinstance(value, (list, tuple)):
             value = [self.__parse(field, name, v) for v in value]
