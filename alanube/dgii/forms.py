@@ -16,6 +16,7 @@ from .config import (
     NCF_E,
     NCF_E_31,
     NCF_E_32,
+    NCF_E_32_AMOUNT_LIMIT_FOR_BUYER_RNC,
     NCF_E_34,
     NCF_E_41,
     NCF_E_43,
@@ -1575,11 +1576,17 @@ class InvoiceForm(Form):
         ncf_serie, ncf_code, ncf_sequence = split_ncf(self.id_doc.encf)
 
         # El RNC del comprador es opcional para algunos tipos de NCF.
-        if not self.buyer.rnc and ncf_code in (NCF_E_31, NCF_E_41, NCF_E_45):
-            raise ValidationError(
-                'El RNC del comprobador es obligatorio para los tipos de '
-                'comprobantes 31, 41 y 45.'
-            )
+        if not self.buyer.rnc:
+            if ncf_code in (NCF_E_31, NCF_E_41, NCF_E_45):
+                raise ValidationError(
+                    f'El RNC del comprobador es obligatorio para comprobantes '
+                    f'fiscales {NCF_E_31}, {NCF_E_41}, {NCF_E_45}.'
+                )
+            elif ncf_code == NCF_E_32 and self.totals.total_amount >= NCF_E_32_AMOUNT_LIMIT_FOR_BUYER_RNC:
+                raise ValidationError(
+                    f'El RNC del comprador es obligatorio para NCF {NCF_E_32} '
+                    f'en facturas con monto mayor o igual a {NCF_E_32_AMOUNT_LIMIT_FOR_BUYER_RNC}.'
+                )
 
         # Validar los totals.
         # Estos comprobantes no aplican para itbis.
