@@ -29,11 +29,11 @@ def send_fiscal_invoice(payload):
     return AlanubeAPI.send_fiscal_invoice(payload)
 
 
-def get_fiscal_invoice_status(document_id: str):
+def get_fiscal_invoice_status(document_id: str, company_id: str = None):
     """
     Consultar el estado de la Factura de Crédito Fiscal Electrónica (31)
     """
-    return AlanubeAPI.get_fiscal_invoice_status(document_id)
+    return AlanubeAPI.get_fiscal_invoice_status(document_id, company_id)
 
 
 def send_invoice(payload):
@@ -43,11 +43,11 @@ def send_invoice(payload):
     return AlanubeAPI.send_invoice(payload)
 
 
-def get_invoice_status(document_id: str):
+def get_invoice_status(document_id: str, company_id: str = None):
     """
     Consultar el estado de la Factura de Consumo Electrónica (32)
     """
-    return AlanubeAPI.get_invoice_status(document_id)
+    return AlanubeAPI.get_invoice_status(document_id, company_id)
 
 
 def send_debit_note(payload):
@@ -57,11 +57,11 @@ def send_debit_note(payload):
     return AlanubeAPI.send_debit_note(payload)
 
 
-def get_debit_note_status(document_id: str):
+def get_debit_note_status(document_id: str, company_id: str = None):
     """
     Consultar el estado de la Nota de Débito Electrónica (33)
     """
-    return AlanubeAPI.get_debit_note_status(document_id)
+    return AlanubeAPI.get_debit_note_status(document_id, company_id)
 
 
 def send_credit_note(payload):
@@ -71,11 +71,11 @@ def send_credit_note(payload):
     return AlanubeAPI.send_credit_note(payload)
 
 
-def get_credit_note_status(document_id: str):
+def get_credit_note_status(document_id: str, company_id: str = None):
     """
     Consultar el estado de la Nota de Crédito Electrónica (34)
     """
-    return AlanubeAPI.get_credit_note_status(document_id)
+    return AlanubeAPI.get_credit_note_status(document_id, company_id)
 
 
 def send_purchase(payload):
@@ -85,11 +85,11 @@ def send_purchase(payload):
     return AlanubeAPI.send_purchase(payload)
 
 
-def get_purchase_status(document_id: str):
+def get_purchase_status(document_id: str, company_id: str = None):
     """
     Consultar el estado del Documento de Compra Electrónico (41)
     """
-    return AlanubeAPI.get_purchase_status(document_id)
+    return AlanubeAPI.get_purchase_status(document_id, company_id)
 
 
 def send_minor_expense(payload):
@@ -99,11 +99,11 @@ def send_minor_expense(payload):
     return AlanubeAPI.send_minor_expense(payload)
 
 
-def get_minor_expense_status(document_id: str):
+def get_minor_expense_status(document_id: str, company_id: str = None):
     """
     Consultar el estado del Documento de Gasto Menor Electrónico (43)
     """
-    return AlanubeAPI.get_minor_expense_status(document_id)
+    return AlanubeAPI.get_minor_expense_status(document_id, company_id)
 
 
 def send_special_regime(payload):
@@ -113,11 +113,11 @@ def send_special_regime(payload):
     return AlanubeAPI.send_special_regime(payload)
 
 
-def get_special_regime_status(document_id: str):
+def get_special_regime_status(document_id: str, company_id: str = None):
     """
     Consultar el estado del Documento de Régimen Especial Electrónico (44)
     """
-    return AlanubeAPI.get_special_regime_status(document_id)
+    return AlanubeAPI.get_special_regime_status(document_id, company_id)
 
 
 def send_gubernamental(payload):
@@ -127,11 +127,11 @@ def send_gubernamental(payload):
     return AlanubeAPI.send_gubernamental(payload)
 
 
-def get_gubernamental_status(document_id: str):
+def get_gubernamental_status(document_id: str, company_id: str = None):
     """
     Consultar el estado del Documento Gubernamental Electrónico (45)
     """
-    return AlanubeAPI.get_gubernamental_status(document_id)
+    return AlanubeAPI.get_gubernamental_status(document_id, company_id)
 
 
 def send_export_support(payload):
@@ -141,11 +141,11 @@ def send_export_support(payload):
     return AlanubeAPI.send_export_support(payload)
 
 
-def get_export_support_status(document_id: str):
+def get_export_support_status(document_id: str, company_id: str = None):
     """
     Consultar el estado del Documento de Soporte de Exportación Electrónico (46)
     """
-    return AlanubeAPI.get_export_support_status(document_id)
+    return AlanubeAPI.get_export_support_status(document_id, company_id)
 
 
 def send_payment_abroad_support(payload):
@@ -155,11 +155,11 @@ def send_payment_abroad_support(payload):
     return AlanubeAPI.send_payment_abroad_support(payload)
 
 
-def get_payment_abroad_support_status(document_id: str):
+def get_payment_abroad_support_status(document_id: str, company_id: str = None):
     """
     Consultar el estado del Documento de Soporte de Pagos al Exterior Electrónico (47)
     """
-    return AlanubeAPI.get_payment_abroad_support_status(document_id)
+    return AlanubeAPI.get_payment_abroad_support_status(document_id, company_id)
 
 
 def send_cancellation(payload):
@@ -169,8 +169,8 @@ def send_cancellation(payload):
     return AlanubeAPI.send_cancellation(payload)
 
 
-def get_cancellation_status(cancellation_id: str):
+def get_cancellation_status(cancellation_id: str, company_id: str = None):
     """
     Consultar el estado de la anulación
     """
-    return AlanubeAPI.get_cancellation_status(cancellation_id)
+    return AlanubeAPI.get_cancellation_status(cancellation_id, company_id)

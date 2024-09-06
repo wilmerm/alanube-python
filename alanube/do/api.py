@@ -244,11 +244,14 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_fiscal_invoice_status(cls, fiscal_invoice_id: str):
+    def get_fiscal_invoice_status(cls, fiscal_invoice_id: str, company_id: str = None):
         """
         Consultar el estado de la Factura de Crédito Fiscal Electrónica (31)
         """
         url = cls.config.endpoint_fiscal_invoices_status.format(id=fiscal_invoice_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
+
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -262,11 +265,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_invoice_status(cls, invoice_id: str):
+    def get_invoice_status(cls, invoice_id: str, company_id: str = None):
         """
         Consultar el estado de la Factura de Consumo Electrónica (32)
         """
         url = cls.config.endpoint_invoices_status.format(id=invoice_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -280,11 +285,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_debit_note_status(cls, debit_note_id: str):
+    def get_debit_note_status(cls, debit_note_id: str, company_id: str = None):
         """
         Consultar el estado de la Nota de Débito Electrónica (33)
         """
         url = cls.config.endpoint_debit_notes_status.format(id=debit_note_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -298,11 +305,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_credit_note_status(cls, credit_note_id: str):
+    def get_credit_note_status(cls, credit_note_id: str, company_id: str = None):
         """
         Consultar el estado de la Nota de Crédito Electrónica (34)
         """
         url = cls.config.endpoint_credit_notes_status.format(id=credit_note_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -316,11 +325,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_purchase_status(cls, purchase_id: str):
+    def get_purchase_status(cls, purchase_id: str, company_id: str = None):
         """
         Consultar el estado del Documento de Compra Electrónico (41)
         """
         url = cls.config.endpoint_purchases_status.format(id=purchase_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -334,11 +345,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_minor_expense_status(cls, minor_expense_id: str):
+    def get_minor_expense_status(cls, minor_expense_id: str, company_id: str = None):
         """
         Consultar el estado del Documento de Gasto Menor Electrónico (43)
         """
         url = cls.config.endpoint_minorexpenses_status.format(id=minor_expense_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -352,11 +365,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_special_regime_status(cls, special_regime_id: str):
+    def get_special_regime_status(cls, special_regime_id: str, company_id: str = None):
         """
         Consultar el estado del Documento de Régimen Especial Electrónico (44)
         """
         url = cls.config.endpoint_special_regimes_status.format(id=special_regime_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -370,11 +385,14 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_gubernamental_status(cls, gubernamental_id: str):
+    def get_gubernamental_status(cls, gubernamental_id: str, company_id: str = None):
         """
         Consultar el estado del Documento Gubernamental Electrónico (45)
         """
         url = cls.config.endpoint_gubernamentals_status.format(id=gubernamental_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
+
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -388,11 +406,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_export_support_status(cls, export_support_id: str):
+    def get_export_support_status(cls, export_support_id: str, company_id: str = None):
         """
         Consultar el estado del Documento de Soporte de Exportación Electrónico (46)
         """
         url = cls.config.endpoint_export_supports_status.format(id=export_support_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -406,11 +426,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_payment_abroad_support_status(cls, payment_abroad_support_id: str):
+    def get_payment_abroad_support_status(cls, payment_abroad_support_id: str, company_id: str = None):
         """
         Consultar el estado del Documento de Soporte de Pagos al Exterior Electrónico (47)
         """
         url = cls.config.endpoint_payment_abroad_supports_status.format(id=payment_abroad_support_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
@@ -425,10 +447,12 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_cancellation_status(cls, cancellation_id: str):
+    def get_cancellation_status(cls, cancellation_id: str, company_id: str = None):
         """
         Consultar el estado de la anulación
         """
         url = cls.config.endpoint_cancellations_status.format(id=cancellation_id)
+        if company_id:
+            url += f'/idCompany/{company_id}'
         response = cls.get(url, expected_response_code=200)
         return response.json()

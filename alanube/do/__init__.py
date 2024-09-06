@@ -171,7 +171,7 @@ class Alanube:
         return func(payload)
 
     @staticmethod
-    def get_document_status(encf_type: int, document_id: str):
+    def get_document_status(encf_type: int, document_id: str, company_id: str = None):
         """
         Retrieve the status of an electronic document of the specified type
         from the Alanube API.
@@ -181,6 +181,7 @@ class Alanube:
         Args:
             `encf_type` (int): The type of the eNCF document.
             `document_id` (str): The ID of the document to retrieve the status for.
+            `company_id` (str): Optional, asociated company ID.
 
         Returns:
             `dict`: The response from the Alanube API.
@@ -188,7 +189,7 @@ class Alanube:
         func = Alanube.get_status_func_map.get(encf_type)
         if func is None:
             raise NotImplementedError(f"No implementation for eNCF type: {encf_type}")
-        return func(document_id)
+        return func(document_id, company_id)
 
     @staticmethod
     def send_cancellation(payload: dict):
@@ -206,7 +207,7 @@ class Alanube:
         return send_cancellation(payload)
 
     @staticmethod
-    def get_cancellation_status(cancellation_id: str):
+    def get_cancellation_status(cancellation_id: str, company_id: str = None):
         """
         Retrieve the status of a document cancellation request from the Alanube API.
 
@@ -214,11 +215,12 @@ class Alanube:
 
         Args:
             `cancellation_id` (str): The ID of the cancellation to retrieve the status for.
+            `company_id` (str): Optional, asociated company ID.
 
         Returns:
             `dict`: The response from the Alanube API.
         """
-        return get_cancellation_status(cancellation_id)
+        return get_cancellation_status(cancellation_id, company_id)
 
 
 __all__ = ['Alanube']
