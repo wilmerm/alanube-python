@@ -67,6 +67,6 @@ keywords = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/wilmerm/alanube-python-api"
-Issues = "https://github.com/wilmerm/alanube-python-api/issues"
-Repository = "https://github.com/wilmerm/alanube-python-api"
+Homepage = "https://github.com/wilmerm/alanube-python"
+Issues = "https://github.com/wilmerm/alanube-python/issues"
+Repository = "https://github.com/wilmerm/alanube-python"
