@@ -181,8 +181,8 @@ class AlanubeAPI:
 
     @staticmethod
     def process_response(response: requests.Response, expected_response_code: int = None):
-        logger.info(f"AlanubeAPI.response | {response.status_code} | {response.json()}")
         handle_response_error(response, expected_response_code=expected_response_code)
+        logger.info(f"AlanubeAPI.response | {response.status_code} | {response.json()}")
         return response
 
     @staticmethod
