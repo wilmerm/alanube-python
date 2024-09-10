@@ -1,3 +1,4 @@
+import logging
 from datetime import date, datetime
 from dateutil import parser
 from decimal import Decimal
@@ -5,6 +6,9 @@ import requests
 from dataclasses import dataclass
 
 from .exceptions import handle_response_error
+
+
+logger = logging.getLogger(__package__)
 
 
 @dataclass(frozen=True)
@@ -138,6 +142,7 @@ class AlanubeAPI:
     def request(endpoint, method='GET', params=None, data=None, expected_response_code=None):
         url = AlanubeAPI.build_url(endpoint)
         headers = AlanubeAPI.get_headers()
+        logger.info(f"AlanubeAPI.request.{method} | URL: '{url}' \nparams: {params} \ndata: {data}")
         response = requests.request(method, url, headers=headers, params=params, json=data)
         return response
 
@@ -176,6 +181,7 @@ class AlanubeAPI:
 
     @staticmethod
     def process_response(response: requests.Response, expected_response_code: int = None):
+        logger.info(f"AlanubeAPI.response | {response.status_code} | {response.json()}")
         handle_response_error(response, expected_response_code=expected_response_code)
         return response
 
