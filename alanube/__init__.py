@@ -14,7 +14,7 @@ Country-specific directories:
 - `bo`: Implementation for Bolivia (future)
 """
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = "Wilmer Martínez"
 __email__ = "info@wilmermartinez.dev"
 __license__ = "MIT"
