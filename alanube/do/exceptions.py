@@ -103,6 +103,17 @@ def handle_response_error(response: requests.Response, expected_response_code: i
 
         raise APIError(errors=errors, response=response)
 
+    # A successful response may still contain data indicating a failure.
+    try:
+        data = response.json()
+    except ValueError:
+        data = {'content': str(response.content)}
+
+    if data.get('httpStatusCode') in (400, 404, 500):
+        # We throw a generic `APIError` since the error is
+        # not directly related to the resource queried
+        raise APIError(errors=data, response=response)
+
     if expected_response_code and expected_response_code != response.status_code:
         raise UnexpectedResponseCodeError(
             expected_code=expected_response_code,
