@@ -15,6 +15,8 @@ from .api import AlanubeAPI
 from .utils import (
     get_company,
     create_company,
+    get_received_document,
+    get_received_documents,
     update_company,
     send_fiscal_invoice,
     get_fiscal_invoice_status,
@@ -221,6 +223,38 @@ class Alanube:
             `dict`: The response from the Alanube API.
         """
         return get_cancellation_status(cancellation_id, company_id)
+
+    @staticmethod
+    def get_received_document(received_document_id: str, company_id: str = None):
+        """
+        Retrieve the 'received document' from the Alanube API.
+
+        This method sends a request to get the 'received document'.
+
+        Args:
+            `received_document_id` (str): The ID of the 'received document' to retrieve.
+            `company_id` (str): Optional, asociated company ID.
+
+        Returns:
+            `dict`: The response from the Alanube API.
+        """
+        return get_received_document(received_document_id, company_id)
+
+    @staticmethod
+    def get_received_documents(
+        company_id=None,
+        limit=25,
+        page=1,
+        start=None,
+        end=None,
+    ):
+        """
+        Retrieve the 'received documents' from the Alanube API.
+
+        Returns:
+            `dict`: The response from the Alanube API.
+        """
+        return get_received_documents(company_id, limit, page, start, end)
 
 
 __all__ = ['Alanube']
