@@ -119,6 +119,11 @@ class APIConfig:
     def endpoint_cancellations_status(self):
         return self.endpoint_cancellations + "/{id}"
 
+    @property
+    def endpoint_received_documents(self):
+        # ?limit=25&page=1&start=2024-09-01&end=2024-10-01
+        return f"{self.api_url}/received-documents"
+
 
 class AlanubeAPI:
     config: APIConfig = None
@@ -460,5 +465,110 @@ class AlanubeAPI:
         url = cls.config.endpoint_cancellations_status.format(id=cancellation_id)
         if company_id:
             url += f'/idCompany/{company_id}'
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_received_document(cls, received_document_id: str, company_id: str = None):
+        """
+        Consultar un 'documento recibido'
+
+        Example response:
+            ```json
+            {
+                "id": "01FY9949NKWJ9YNTY80CN8YV7Y",
+                "issuerIdentification": "123456789",
+                "buyerIdentification": "123456789",
+                "documentType": "33",
+                "documentNumber": "E330110000003",
+                "documentStampDate": "2021-09-27",
+                "signatureDateTime": "2021-12-29 02:17:41",
+                "totalAmount": "1180",
+                "status": "RECEIVED",
+                "errorMsg": null,
+                "commercialResponse": "ACCEPTED",
+                "timestamp": "2022-03-16T11:52:06.000Z",
+                "xml": "https://api-alanube-e-provider-dom-..."
+                }
+            ```
+        """
+        url = f'{cls.config.endpoint_received_documents}/{received_document_id}'
+        if company_id:
+            url += f'/idCompany/{company_id}'
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_received_documents(
+        cls,
+        company_id=None,
+        limit=25,
+        page=1,
+        start=None,
+        end=None,
+    ):
+        """
+        Consultar varios 'documentos recibidos'
+
+        args:
+            `limit`: Límite de documentos consultados en cada request.
+            `page`: Página a ser consultada en el request actual.
+            `start`: Fecha de inicio de la consulta basada en la fecha de emisión
+                del documento(s). Formato: YYYY-MM-DD. Si no se envía, se tomará
+                la fecha actual menos 30 días en zona horaria UTC.
+            `end`: Fecha de fin de la consulta basada en la fecha de emisión del
+                documento(s). Formato: YYYY-MM-DD. Si no se envía, se tomará la
+                fecha actual en zona horaria UTC.
+
+        Example query string:
+            `?limit=25&page=1&start=2024-01-10&end=2024-09-30`
+
+        Example response:
+            ```json
+            {
+                "metadata": {
+                    "current_page": 0,
+                    "limit": 0,
+                    "from": 0,
+                    "to": 0
+                },
+                "documents": [
+                    {
+                    "id": "string",
+                    "issuerIdentification": "string",
+                    "buyerIdentification": "string",
+                    "documentType": "string",
+                    "documentNumber": "string",
+                    "documentStampDate": "string",
+                    "signatureDateTime": "string",
+                    "totalAmount": "string",
+                    "status": "RECEIVED",
+                    "errorMsg": "string",
+                    "commercialResponse": "ACCEPTED",
+                    "timestamp": "2024-10-08T22:17:50.387Z"
+                    }
+                ]
+            }
+            ```
+        """
+        url = cls.config.endpoint_received_documents
+
+        if company_id:
+            url += f'/idCompany/{company_id}'
+
+        query_params = []
+
+        if limit:
+            query_params.append(f'limit={limit}')
+        if page:
+            query_params.append(f'page={page}')
+        if start:
+            query_params.append(f'start={start}')
+        if end:
+            query_params.append(f'end={end}')
+
+        if query_params:
+            url += '?' + '&'.join(query_params)
+
         response = cls.get(url, expected_response_code=200)
         return response.json()

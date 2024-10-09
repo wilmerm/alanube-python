@@ -174,3 +174,23 @@ def get_cancellation_status(cancellation_id: str, company_id: str = None):
     Consultar el estado de la anulación
     """
     return AlanubeAPI.get_cancellation_status(cancellation_id, company_id)
+
+
+def get_received_document(received_document_id: str, company_id: str = None):
+    """
+    Consultar un 'documento recibido'
+    """
+    return AlanubeAPI.get_received_document(received_document_id, company_id)
+
+
+def get_received_documents(
+    company_id=None,
+    limit=25,
+    page=1,
+    start=None,
+    end=None,
+):
+    """
+    Consultar un 'documento recibido'
+    """
+    return AlanubeAPI.get_received_documents(company_id, limit, page, start, end)
