@@ -489,7 +489,7 @@ class AlanubeAPI:
                 "commercialResponse": "ACCEPTED",
                 "timestamp": "2022-03-16T11:52:06.000Z",
                 "xml": "https://api-alanube-e-provider-dom-..."
-                }
+            }
             ```
         """
         url = f'{cls.config.endpoint_received_documents}/{received_document_id}'
@@ -534,18 +534,18 @@ class AlanubeAPI:
                 },
                 "documents": [
                     {
-                    "id": "string",
-                    "issuerIdentification": "string",
-                    "buyerIdentification": "string",
-                    "documentType": "string",
-                    "documentNumber": "string",
-                    "documentStampDate": "string",
-                    "signatureDateTime": "string",
-                    "totalAmount": "string",
-                    "status": "RECEIVED",
-                    "errorMsg": "string",
-                    "commercialResponse": "ACCEPTED",
-                    "timestamp": "2024-10-08T22:17:50.387Z"
+                        "id": "string",
+                        "issuerIdentification": "string",
+                        "buyerIdentification": "string",
+                        "documentType": "string",
+                        "documentNumber": "string",
+                        "documentStampDate": "string",
+                        "signatureDateTime": "string",
+                        "totalAmount": "string",
+                        "status": "RECEIVED",
+                        "errorMsg": "string",
+                        "commercialResponse": "ACCEPTED",
+                        "timestamp": "2024-10-08T22:17:50.387Z"
                     }
                 ]
             }
