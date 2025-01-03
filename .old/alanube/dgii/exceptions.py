@@ -1,5 +1,0 @@
-
-
-
-class ValidationError(ValueError):
-    pass
