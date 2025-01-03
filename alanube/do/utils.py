@@ -194,3 +194,10 @@ def get_received_documents(
     Consultar un 'documento recibido'
     """
     return AlanubeAPI.get_received_documents(company_id, limit, page, start, end)
+
+
+def check_directory(rnc: str = None, company_id: str = None):
+    """
+    Consultar el directorio de compañías activas para facturación electrónica.
+    """
+    return AlanubeAPI.check_directory(rnc, company_id)
