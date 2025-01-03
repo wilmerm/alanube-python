@@ -125,6 +125,11 @@ class APIConfig:
         # ?limit=25&page=1&start=2024-09-01&end=2024-10-01
         return f"{self.api_url}/received-documents"
 
+    @property
+    def endpoint_check_directory(self):
+        # ?rnc=123456789 (optional)
+        return f"{self.api_url}/check-directory"
+
 
 class AlanubeAPI:
     config: APIConfig = None
