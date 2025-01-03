@@ -109,7 +109,7 @@ def handle_response_error(response: requests.Response, expected_response_code: i
     except ValueError:
         data = {'content': str(response.content)}
 
-    if data.get('httpStatusCode') in (400, 404, 500):
+    if isinstance(data, dict) and data.get('httpStatusCode') in (400, 404, 500):
         # We throw a generic `APIError` since the error is
         # not directly related to the resource queried
         raise APIError(errors=data, response=response)
