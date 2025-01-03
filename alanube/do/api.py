@@ -1,5 +1,6 @@
 import logging
 from datetime import date, datetime
+from typing import Any, Dict, List
 from dateutil import parser
 from decimal import Decimal
 import requests
@@ -212,7 +213,7 @@ class AlanubeAPI:
             return value
 
     @classmethod
-    def create_company(cls, payload):
+    def create_company(cls, payload) -> Dict[str, Any]:
         """
         Dar de alta a una empresa
 
@@ -224,7 +225,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def update_company(cls, payload, company_id: str = None):
+    def update_company(cls, payload, company_id: str = None) -> Dict[str, Any]:
         """
         Actualizar la información de una empresa
 
@@ -237,7 +238,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_company(cls, company_id: str = None):
+    def get_company(cls, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar la información de una empresa
         """
@@ -246,7 +247,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_fiscal_invoice(cls, payload):
+    def send_fiscal_invoice(cls, payload) -> Dict[str, Any]:
         """
         Emitir Factura de Crédito Fiscal Electrónica (31)
         """
@@ -255,7 +256,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_fiscal_invoice_status(cls, fiscal_invoice_id: str, company_id: str = None):
+    def get_fiscal_invoice_status(cls, fiscal_invoice_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado de la Factura de Crédito Fiscal Electrónica (31)
         """
@@ -267,7 +268,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_invoice(cls, payload):
+    def send_invoice(cls, payload) -> Dict[str, Any]:
         """
         Emitir Factura de Consumo Electrónica (32)
         """
@@ -276,7 +277,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_invoice_status(cls, invoice_id: str, company_id: str = None):
+    def get_invoice_status(cls, invoice_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado de la Factura de Consumo Electrónica (32)
         """
@@ -287,7 +288,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_debit_note(cls, payload):
+    def send_debit_note(cls, payload) -> Dict[str, Any]:
         """
         Emitir Nota de Débito Electrónica (33)
         """
@@ -296,7 +297,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_debit_note_status(cls, debit_note_id: str, company_id: str = None):
+    def get_debit_note_status(cls, debit_note_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado de la Nota de Débito Electrónica (33)
         """
@@ -307,7 +308,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_credit_note(cls, payload):
+    def send_credit_note(cls, payload) -> Dict[str, Any]:
         """
         Emitir Nota de Crédito Electrónica (34)
         """
@@ -316,7 +317,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_credit_note_status(cls, credit_note_id: str, company_id: str = None):
+    def get_credit_note_status(cls, credit_note_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado de la Nota de Crédito Electrónica (34)
         """
@@ -327,7 +328,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_purchase(cls, payload):
+    def send_purchase(cls, payload) -> Dict[str, Any]:
         """
         Emitir Documento de Compra Electrónico (41)
         """
@@ -336,7 +337,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_purchase_status(cls, purchase_id: str, company_id: str = None):
+    def get_purchase_status(cls, purchase_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado del Documento de Compra Electrónico (41)
         """
@@ -347,7 +348,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_minor_expense(cls, payload):
+    def send_minor_expense(cls, payload) -> Dict[str, Any]:
         """
         Emitir Documento de Gasto Menor Electrónico (43)
         """
@@ -356,7 +357,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_minor_expense_status(cls, minor_expense_id: str, company_id: str = None):
+    def get_minor_expense_status(cls, minor_expense_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado del Documento de Gasto Menor Electrónico (43)
         """
@@ -367,7 +368,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_special_regime(cls, payload):
+    def send_special_regime(cls, payload) -> Dict[str, Any]:
         """
         Emitir Documento de Régimen Especial Electrónico (44)
         """
@@ -376,7 +377,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_special_regime_status(cls, special_regime_id: str, company_id: str = None):
+    def get_special_regime_status(cls, special_regime_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado del Documento de Régimen Especial Electrónico (44)
         """
@@ -387,7 +388,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_gubernamental(cls, payload):
+    def send_gubernamental(cls, payload) -> Dict[str, Any]:
         """
         Emitir Documento Gubernamental Electrónico (45)
         """
@@ -396,7 +397,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_gubernamental_status(cls, gubernamental_id: str, company_id: str = None):
+    def get_gubernamental_status(cls, gubernamental_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado del Documento Gubernamental Electrónico (45)
         """
@@ -408,7 +409,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_export_support(cls, payload):
+    def send_export_support(cls, payload) -> Dict[str, Any]:
         """
         Emitir Documento de Soporte de Exportación Electrónico (46)
         """
@@ -417,7 +418,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_export_support_status(cls, export_support_id: str, company_id: str = None):
+    def get_export_support_status(cls, export_support_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado del Documento de Soporte de Exportación Electrónico (46)
         """
@@ -428,7 +429,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_payment_abroad_support(cls, payload):
+    def send_payment_abroad_support(cls, payload) -> Dict[str, Any]:
         """
         Emitir Documento de Soporte de Pagos al Exterior Electrónico (47)
         """
@@ -437,7 +438,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_payment_abroad_support_status(cls, payment_abroad_support_id: str, company_id: str = None):
+    def get_payment_abroad_support_status(cls, payment_abroad_support_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado del Documento de Soporte de Pagos al Exterior Electrónico (47)
         """
@@ -448,7 +449,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def send_cancellation(cls, payload):
+    def send_cancellation(cls, payload) -> Dict[str, Any]:
         """
         Este endpoint sirve para emitir anulaciones, las cuales se usan para
         anular rangos de numeración que no se usarán
@@ -458,7 +459,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_cancellation_status(cls, cancellation_id: str, company_id: str = None):
+    def get_cancellation_status(cls, cancellation_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar el estado de la anulación
         """
@@ -469,7 +470,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_received_document(cls, received_document_id: str, company_id: str = None):
+    def get_received_document(cls, received_document_id: str, company_id: str = None) -> Dict[str, Any]:
         """
         Consultar un 'documento recibido'
 
@@ -506,7 +507,7 @@ class AlanubeAPI:
         page=1,
         start=None,
         end=None,
-    ):
+    ) -> Dict[str, Any]:
         """
         Consultar varios 'documentos recibidos'
 
@@ -572,3 +573,31 @@ class AlanubeAPI:
 
         response = cls.get(url, expected_response_code=200)
         return response.json()
+
+    @classmethod
+    def check_directory(cls, rnc: str = None, company_id: str = None):
+        """
+        Consultar el directorio de compañías activas para facturación electrónica.
+
+        Parámetros:
+        - rnc (str, opcional): El RNC de la compañía para consultar en el directorio.
+        - company_id (str, opcional): El ID de la compañía para consultar en el directorio.
+
+        Retorna:
+        - data (dict o list): Los datos de la compañía o una lista de compañías.
+        """
+        url = cls.config.endpoint_check_directory
+
+        if company_id:
+            url += f'/idCompany/{company_id}'
+
+        if rnc:
+            url += f'?rnc={rnc}'
+
+        response = cls.get(url, expected_response_code=200)
+        data: List[Dict[str, str]] = response.json()
+
+        if rnc and isinstance(data, list) and len(data) == 1:
+            return data[0]
+
+        return data

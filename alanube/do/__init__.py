@@ -7,12 +7,13 @@ Classes:
     Alanube: Main class to interact with the Alanube API.
 """
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 
 from . import exceptions
 from .api import AlanubeAPI
 from .utils import (
+    check_directory,
     get_company,
     create_company,
     get_received_document,
@@ -255,6 +256,13 @@ class Alanube:
             `dict`: The response from the Alanube API.
         """
         return get_received_documents(company_id, limit, page, start, end)
+
+    @staticmethod
+    def check_directory(rnc=None, company_id=None):
+        """
+        Check the directory of a company in the Alanube API.
+        """
+        return check_directory(rnc, company_id)
 
 
 __all__ = ['Alanube']
