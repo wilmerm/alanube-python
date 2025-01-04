@@ -13,7 +13,6 @@ __version__ = "1.2.2"
 from . import exceptions
 from .api import AlanubeAPI
 from .utils import (
-    check_directory,
     get_company,
     create_company,
     get_received_document,
@@ -262,7 +261,15 @@ class Alanube:
         """
         Check the directory of a company in the Alanube API.
         """
-        return check_directory(rnc, company_id)
+        return AlanubeAPI.check_directory(rnc, company_id)
+
+    @staticmethod
+    def check_dgii_status(environment: int = None, maintenance: bool = False, company_id: str = None):
+        """
+        Check the status of the DGII in the Alanube API.
+        """
+        return AlanubeAPI.check_dgii_status(environment, maintenance, company_id)
+
 
 
 __all__ = ['Alanube']

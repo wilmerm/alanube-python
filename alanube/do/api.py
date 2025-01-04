@@ -122,13 +122,48 @@ class APIConfig:
 
     @property
     def endpoint_received_documents(self):
-        # ?limit=25&page=1&start=2024-09-01&end=2024-10-01
+        """
+        Constructs the URL for the received documents endpoint.
+
+        Query parameters:
+        -----------------
+        - limit (int): The number of documents to retrieve.
+        - page (int): The page number to retrieve.
+        - start (str): The start date to filter the documents by.
+        - end (str): The end date to filter the documents by.
+        """
         return f"{self.api_url}/received-documents"
 
     @property
     def endpoint_check_directory(self):
-        # ?rnc=123456789 (optional)
+        """
+        Constructs the URL for the 'check-directory' endpoint.
+
+        query parameters:
+        -----------------
+        - rnc (str): The RNC of the company to check in the directory.
+
+        Returns:
+            str: The full URL for the 'check-directory' endpoint.
+        """
         return f"{self.api_url}/check-directory"
+
+    @property
+    def endpoint_check_dgii_status(self):
+        """
+        Constructs the URL for checking the DGII status.
+
+        Optional query parameters:
+        --------------------------------
+        - environment (int): Specifies the environment to check the status for.
+            - 1: PreCertificacion
+            - 2: Producción
+            - 3: Certificacion
+        - maintenance (str): If set to 'yes', retrieves the maintenance windows
+          for the electronic invoice services of the DGII. If the 'environment'
+          parameter is also provided, it takes precedence over this parameter.
+        """
+        return f"{self.api_url}/check-dgii-status"
 
 
 class AlanubeAPI:
@@ -605,4 +640,40 @@ class AlanubeAPI:
         if rnc and isinstance(data, list) and len(data) == 1:
             return data[0]
 
+        return data
+
+    @classmethod
+    def check_dgii_status(cls, environment: int = None, maintenance: bool = False, company_id: str = None) -> Dict[str, Any]:
+        """
+        Consultar el estado de los servicios de la DGII.
+
+        Parámetros opcionales:
+        --------------------------------
+        - environment (int): Especifica el ambiente para el cual se desea consultar el estado.
+            - 1: PreCertificacion
+            - 2: Producción
+            - 3: Certificacion
+        - maintenance (bool): Si es True, se recuperan las ventanas de
+            mantenimiento para los servicios de factura electrónica de la DGII.
+            Si también se proporciona el parámetro 'environment', este tiene
+            prioridad sobre este parámetro.
+        """
+        url = cls.config.endpoint_check_dgii_status
+
+        if company_id:
+            url += f'/idCompany/{company_id}'
+
+        query_params = []
+
+        if environment:
+            query_params.append(f'environment={environment}')
+
+        if maintenance:
+            query_params.append(f'maintenance=yes') # Alanube espera 'yes' en lugar de True
+
+        if query_params:
+            url += '?' + '&'.join(query_params)
+
+        response = cls.get(url, expected_response_code=200)
+        data = response.json()
         return data
