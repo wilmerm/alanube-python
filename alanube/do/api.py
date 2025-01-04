@@ -643,7 +643,12 @@ class AlanubeAPI:
         return data
 
     @classmethod
-    def check_dgii_status(cls, environment: int = None, maintenance: bool = False, company_id: str = None) -> Dict[str, Any]:
+    def check_dgii_status(
+        cls,
+        environment: int = None,
+        maintenance: bool = False,
+        company_id: str = None,
+    ) -> List[Dict[str, Any]] | Dict[str, Any]:
         """
         Consultar el estado de los servicios de la DGII.
 
