@@ -24,7 +24,10 @@ class APIError(AlanubeError):
         self.status_code = response.status_code if response else None
 
         if not message:
-            message = self.errors.get('message', str(self.errors)) if self.errors else f"{self.status_code}: {response.url}"
+            message = (
+                self.errors.get('message', str(self.errors))
+                if self.errors else f"{self.status_code}: {response.url}"
+            )
         self.message = message
         super().__init__(message)
 
