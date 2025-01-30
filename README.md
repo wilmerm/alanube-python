@@ -92,6 +92,34 @@ If you're contributing to the development of this library, here are the steps to
     * -s: Specifies the directory to look for tests (tests folder).
     * -p: Defines the pattern for test file names (e.g., *.py).
 
+### Building and Publishing the Library
+
+To compile and upload the library to PyPI, follow these steps:
+
+1. Ensure you have the necessary dependencies:
+
+    ```sh
+    pip install build twine
+    ```
+
+2. Build the package:
+
+    ```sh
+    python -m build
+    ```
+
+3. (Optional) Verify the package:
+
+    ```sh
+    twine check dist/*
+    ```
+
+4. Upload the package to PyPI:
+
+    ```sh
+    python -m twine upload dist/*
+    ```
+
 ## Licence
 
 This project is licensed under the MIT License.
