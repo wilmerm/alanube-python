@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alanube"
-version = "0.4.0"
+version = "1.0.0"
 authors = [
-  { name = "Wilmer Martinez", email = "info@wilmermartinez.dev" },
+  { name = "Wilmer Martinez" },
 ]
 description = "Python library to connect with Alanube API"
 readme = "README.md"

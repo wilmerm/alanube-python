@@ -11,10 +11,10 @@ Country-specific directories:
 - `do`: Implementation for the Dominican Republic (DGII)
 - `pa`: Implementation for Panama (future)
 - `cr`: Implementation for Costa Rica (future)
+- `pe`: Implementation for Peru (future)
 - `bo`: Implementation for Bolivia (future)
 """
 
-__version__ = "0.4.0"
+__version__ = "1.0.0"
 __author__ = "Wilmer Martínez"
-__email__ = "info@wilmermartinez.dev"
 __license__ = "MIT"
