@@ -1,6 +1,24 @@
 # Alanube Python API
 
-Python library to connect with Alanube API
+A lightweight Python client for connecting to the Alanube e-invoicing API across multiple countries.
+
+[![PyPI version](https://img.shields.io/pypi/v/alanube.svg)](https://pypi.org/project/alanube/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](#running-the-tests)
+
+
+## 📚 Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contents](#contents)
+- [Developers](#developers)
+- [Testing](#running-the-tests)
+- [Build & Publish](#building-and-publishing-the-library)
+- [Credits](#credits)
+- [License](#licence)
+- [Contribute](#contribution-💗)
+
 
 ## Instalation
 
@@ -29,16 +47,22 @@ Now you can easily and efficiently use the Alanube API with this Python library!
 
 ## Contents
 
-- `do`: Implementation for the Dominican Republic (DGII). This is the only fully developed directory and contains all the necessary structure and logic to work with the Alanube API for this country.
-- `pa`: Implementation for Panama (future). If you need to develop for Panama, create a directory named `pa` at the same level as `do` within `alanube` and replicate the internal structure of `do`.
-- `cr`: Implementation for Costa Rica (future). Similarly, create a `cr` directory following the same structure as `do`.
-- `bo`: Implementation for Bolivia (future). The `bo` directory should also follow the structure of `do`.
+- `do`: Fully implemented for the Dominican Republic (DGII).
+- `pa`, `cr`, `pe`, `bo`: Planned support. Follow the structure of the `do` module.
 
 For the missing countries, you can use the `do` directory as a reference to build the required implementations, adapting the logic to meet the specific local requirements of each country.
 
 ### Links
 * [Alanube Official Website](https://www.alanube.co/)
 * [Alanube Documentation](https://developer.alanube.co/)
+
+## Roadmap
+
+- [x] 🇩🇴 Dominican Republic
+- [ ] 🇵🇦 Panama
+- [ ] 🇨🇷 Costa Rica
+- [ ] 🇵🇪 Peru
+- [ ] 🇧🇴 Bolivia
 
 ## Developers
 
@@ -120,18 +144,40 @@ To compile and upload the library to PyPI, follow these steps:
     python -m twine upload dist/*
     ```
 
+## Credits
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/wilmerm">
+        <img src="https://github.com/wilmerm.png" width="100px;" alt="Wilmer Martinez"/><br />
+        <sub><b>Wilmer Martinez</b></sub>
+      </a>
+      <br/>Author & Maintainer
+    </td>
+  </tr>
+</table>
+
+If you contributed to this project and would like to be listed here, feel free to open a pull request adding yourself to the credits section.
+
+
 ## Licence
 
 This project is licensed under the MIT License.
 
 ## Proyect Status
 
-This project is under development
+✅ This project is in production and actively maintained.
 
-## Contribution 💗
+## Contributing
 
-If you find value in this project and would like to show your support, please consider making a donation via PayPal:
+We welcome pull requests and suggestions. Please open an issue or submit a PR.
+
+## Support 💗
+
+If you find this useful, consider supporting:
 
 [Donate on PayPal](https://paypal.me/martinezwilmer?country.x=DO&locale.x=es_XC)
 
 Your generosity helps us to continue improving and maintaining this project. We appreciate every contribution, however small. Thanks for being part of our community!
+
