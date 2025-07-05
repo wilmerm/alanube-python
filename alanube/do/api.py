@@ -140,6 +140,8 @@ class AlanubeAPI:
 
     @staticmethod
     def get_headers():
+        if AlanubeAPI.config is None:
+            raise RuntimeError("API not connected. Call AlanubeAPI.connect first.")
         return {
             "Authorization": f"Bearer {AlanubeAPI.config.token}",
             "Content-Type": "application/json",
