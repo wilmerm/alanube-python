@@ -42,12 +42,12 @@ TO_NOTIFY = "TO_NOTIFY"
 FINISHED = "FINISHED"
 
 ALANUBE_RESPONSE_STATUS_CHOICES = (
-    (REGISTERED, "Se registró el documento"),
-    (TO_SEND, "Se registró y está listo para ser enviado"),
-    (FAILED, "Falló el envío, normalmente porque se está enviando un eNFC que ya se envió"),
-    (WAITING_RESPONSE, "Fue enviado y se encuentra en espera de respuesta de la DGII"),
-    (TO_NOTIFY, "Obtuvo respuesta de la DGII y se notificará mediante el webhook registrado"),
-    (FINISHED, "Su proceso ha finalizado"),
+    (REGISTERED, "Registered"),              # Se registró el documento
+    (TO_SEND, "To send"),                    # Se registró y está listo para ser enviado
+    (FAILED, "Failed"),                      # Falló el envío, normalmente porque se está enviando un eNFC que ya se envió
+    (WAITING_RESPONSE, "Waiting response"),  # Fue enviado y se encuentra en espera de respuesta de la DGII
+    (TO_NOTIFY, "To notify"),                # Obtuvo respuesta de la DGII y se notificará mediante el webhook registrado
+    (FINISHED, "Finished"),                  # Su proceso ha finalizado
 )
 
 
