@@ -149,7 +149,9 @@ class AlanubeAPI:
     @staticmethod
     def request(endpoint, method='GET', params=None, data=None, expected_response_code=None):
         headers = AlanubeAPI.get_headers()
-        logger.info(f"{method}: {endpoint} | Params: {params} | Data: {data}")
+        logger.info(f"{method}: {endpoint} | Params: {params}")
+        if data:
+            logger.debug(f"Data: {data}")
         response = requests.request(method, endpoint, headers=headers, params=params, json=data)
         return response
 
@@ -189,11 +191,12 @@ class AlanubeAPI:
     @staticmethod
     def process_response(response: requests.Response, expected_response_code: int = None):
         handle_response_error(response, expected_response_code=expected_response_code)
+        logger.info(f"Response: {response.status_code}")
         try:
-            logger.info(f"Response: {response.status_code} | json: {response.json()}")
+            logger.debug(f"JSON: {response.json()}")
         except ValueError:
             logger.error("Error parsing response as JSON")
-            logger.info(f"Response: {response.status_code} | text: {response.text}")
+            logger.debug(f"Text: {response.text}")
         return response
 
     @classmethod
