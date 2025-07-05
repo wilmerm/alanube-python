@@ -58,7 +58,7 @@ CURRENCIES = dict(
     CHY='CHY',  # YUAN CHINO
     XDR='XDR',  # DERECHO ESPECIAL DE GIRO83
     DKK='DKK',  # CORONA DANESA
-    ERU='EUR',  # EURO
+    EUR='EUR',  # EURO
     GBP='GBP',  # LIBRA ESTERLINA
     JPY='JPY',  # YEN JAPONES
     NOK='NOK',  # CORONA NORUEGA
@@ -66,6 +66,8 @@ CURRENCIES = dict(
     SEK='SEK',  # CORONA SUECA
     USD='USD',  # DOLAR ESTADOUNIDENSE
     VEF='VEF',  # BOLIVAR FUERTE VENEZOLANO
+    HTG='HTG',  # GURDA HAITIANA
+    MXN='MXN',  # PESO MEXICANO
 )
 
 
@@ -125,5 +127,11 @@ UNIT_MEASURES = {
     53: {'Abrev.': 'P2', 'Medida': 'Pie cuadrado'},
     54: {'Abrev.': 'PAX', 'Medida': 'Pasajero'},
     55: {'Abrev.': 'PULG', 'Medida': 'Pulgadas'},
-    56: {'Abrev.': 'STAY', 'Medida': 'Parqueo barcos en muelle'}
+    56: {'Abrev.': 'STAY', 'Medida': 'Parqueo barcos en muelle'},
+    57: {'Abrev.': 'BDJ', 'Medida': 'Bandeja'},
+    58: {'Abrev.': 'HA', 'Medida': 'Hectárea'},
+    59: {'Abrev.': 'ML', 'Medida': 'Mililitro'},
+    60: {'Abrev.': 'MG', 'Medida': 'Miligramo'},
+    61: {'Abrev.': 'OZ', 'Medida': 'Onzas'},
+    62: {'Abrev.': 'OZT', 'Medida': 'Onzas Troy'},
 }
