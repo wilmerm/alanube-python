@@ -42,12 +42,12 @@ TO_NOTIFY = "TO_NOTIFY"
 FINISHED = "FINISHED"
 
 ALANUBE_RESPONSE_STATUS_CHOICES = (
-    (REGISTERED, "Se registró el documento"),
-    (TO_SEND, "Se registró y está listo para ser enviado"),
-    (FAILED, "Falló el envío, normalmente porque se está enviando un eNFC que ya se envió"),
-    (WAITING_RESPONSE, "Fue enviado y se encuentra en espera de respuesta de la DGII"),
-    (TO_NOTIFY, "Obtuvo respuesta de la DGII y se notificará mediante el webhook registrado"),
-    (FINISHED, "Su proceso ha finalizado"),
+    (REGISTERED, "Registered"),              # Se registró el documento
+    (TO_SEND, "To send"),                    # Se registró y está listo para ser enviado
+    (FAILED, "Failed"),                      # Falló el envío, normalmente porque se está enviando un eNFC que ya se envió
+    (WAITING_RESPONSE, "Waiting response"),  # Fue enviado y se encuentra en espera de respuesta de la DGII
+    (TO_NOTIFY, "To notify"),                # Obtuvo respuesta de la DGII y se notificará mediante el webhook registrado
+    (FINISHED, "Finished"),                  # Su proceso ha finalizado
 )
 
 
@@ -58,7 +58,7 @@ CURRENCIES = dict(
     CHY='CHY',  # YUAN CHINO
     XDR='XDR',  # DERECHO ESPECIAL DE GIRO83
     DKK='DKK',  # CORONA DANESA
-    ERU='EUR',  # EURO
+    EUR='EUR',  # EURO
     GBP='GBP',  # LIBRA ESTERLINA
     JPY='JPY',  # YEN JAPONES
     NOK='NOK',  # CORONA NORUEGA
@@ -66,6 +66,8 @@ CURRENCIES = dict(
     SEK='SEK',  # CORONA SUECA
     USD='USD',  # DOLAR ESTADOUNIDENSE
     VEF='VEF',  # BOLIVAR FUERTE VENEZOLANO
+    HTG='HTG',  # GURDA HAITIANA
+    MXN='MXN',  # PESO MEXICANO
 )
 
 
@@ -125,5 +127,11 @@ UNIT_MEASURES = {
     53: {'Abrev.': 'P2', 'Medida': 'Pie cuadrado'},
     54: {'Abrev.': 'PAX', 'Medida': 'Pasajero'},
     55: {'Abrev.': 'PULG', 'Medida': 'Pulgadas'},
-    56: {'Abrev.': 'STAY', 'Medida': 'Parqueo barcos en muelle'}
+    56: {'Abrev.': 'STAY', 'Medida': 'Parqueo barcos en muelle'},
+    57: {'Abrev.': 'BDJ', 'Medida': 'Bandeja'},
+    58: {'Abrev.': 'HA', 'Medida': 'Hectárea'},
+    59: {'Abrev.': 'ML', 'Medida': 'Mililitro'},
+    60: {'Abrev.': 'MG', 'Medida': 'Miligramo'},
+    61: {'Abrev.': 'OZ', 'Medida': 'Onzas'},
+    62: {'Abrev.': 'OZT', 'Medida': 'Onzas Troy'},
 }
