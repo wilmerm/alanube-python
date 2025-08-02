@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+    <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ site.url }}{{ page.url }}">
+    <meta property="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta property="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ site.baseurl }}/assets/favicon.ico">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --accent-color: #f59e0b;
+            --text-color: #1e293b;
+            --bg-color: #ffffff;
+            --sidebar-bg: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+        
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 76px);
+            overflow-y: auto;
+            position: sticky;
+            top: 76px;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--secondary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            margin: 0.125rem 0.5rem;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+        
+        .main-content {
+            padding: 2rem;
+        }
+        
+        .content-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-color);
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+        }
+        
+        code {
+            background-color: #f1f5f9;
+            color: #dc2626;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+        
+        pre {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .alert {
+            border-radius: 0.5rem;
+            border: none;
+        }
+        
+        .alert-info {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .alert-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--accent-color);
+        }
+        
+        .alert-success {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+        
+        .table {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background-color: var(--sidebar-bg);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+        
+        .footer {
+            background-color: var(--sidebar-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: ">";
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                height: auto;
+                position: static;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ site.baseurl }}/">
+                <i class="fas fa-code me-2"></i>
+                Alanube Python API
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/wilmerm/alanube-python-api" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://pypi.org/project/alanube/" target="_blank">
+                            <i class="fab fa-python"></i> PyPI
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.alanube.co/" target="_blank">
+                            <i class="fas fa-globe"></i> Alanube
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="{{ site.baseurl }}/">
+                            <i class="fas fa-home me-2"></i>Home
+                        </a>
+                        <a class="nav-link" href="{{ site.baseurl }}/installation/">
+                            <i class="fas fa-download me-2"></i>Installation
+                        </a>
+                        <a class="nav-link" href="{{ site.baseurl }}/usage/">
+                            <i class="fas fa-play me-2"></i>Usage Examples
+                        </a>
+                        <a class="nav-link" href="{{ site.baseurl }}/api-reference/">
+                            <i class="fas fa-book me-2"></i>API Reference
+                        </a>
+                        <a class="nav-link" href="{{ site.baseurl }}/countries/">
+                            <i class="fas fa-globe-americas me-2"></i>Country Support
+                        </a>
+                        <a class="nav-link" href="{{ site.baseurl }}/contributing/">
+                            <i class="fas fa-hands-helping me-2"></i>Contributing
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9 col-md-8">
+                <div class="main-content">
+                    <div class="content-wrapper">
+                        <!-- Breadcrumb -->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ site.baseurl }}/">Home</a></li>
+                                {% if page.title %}
+                                <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
+                                {% endif %}
+                            </ol>
+                        </nav>
+                        
+                        <!-- Page Content -->
+                        {{ content }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Alanube Python API</h5>
+                    <p class="text-muted">
+                        A lightweight Python client for connecting to the Alanube e-invoicing API across multiple countries.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="https://github.com/wilmerm/alanube-python-api" class="text-decoration-none me-3">
+                            <i class="fab fa-github fa-lg"></i>
+                        </a>
+                        <a href="https://pypi.org/project/alanube/" class="text-decoration-none me-3">
+                            <i class="fab fa-python fa-lg"></i>
+                        </a>
+                        <a href="https://www.alanube.co/" class="text-decoration-none">
+                            <i class="fas fa-globe fa-lg"></i>
+                        </a>
+                    </div>
+                    <p class="text-muted mt-2">
+                        &copy; {{ site.time | date: '%Y' }} Alanube Team. Licensed under MIT.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // Highlight current page in navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Add copy button to code blocks
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeBlocks = document.querySelectorAll('pre code');
+            
+            codeBlocks.forEach(block => {
+                const button = document.createElement('button');
+                button.className = 'btn btn-sm btn-outline-secondary position-absolute';
+                button.style.top = '0.5rem';
+                button.style.right = '0.5rem';
+                button.innerHTML = '<i class="fas fa-copy"></i>';
+                button.title = 'Copy code';
+                
+                button.addEventListener('click', function() {
+                    navigator.clipboard.writeText(block.textContent).then(function() {
+                        button.innerHTML = '<i class="fas fa-check"></i>';
+                        setTimeout(() => {
+                            button.innerHTML = '<i class="fas fa-copy"></i>';
+                        }, 2000);
+                    });
+                });
+                
+                const pre = block.parentElement;
+                pre.style.position = 'relative';
+                pre.appendChild(button);
+            });
+        });
+    </script>
+</body>
+</html> 
