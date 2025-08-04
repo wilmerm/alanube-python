@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alanube"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name = "Wilmer Martinez" },
 ]
@@ -62,4 +62,5 @@ keywords = [
 Homepage = "https://github.com/wilmerm/alanube-python"
 Issues = "https://github.com/wilmerm/alanube-python/issues"
 Repository = "https://github.com/wilmerm/alanube-python"
+Documentation = "https://wilmerm.github.io/alanube-python"
 
