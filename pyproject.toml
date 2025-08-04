@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Python library to connect with Alanube API"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT"
 requires-python = ">=3.10"
 classifiers = [# https://pypi.org/classifiers/
 
@@ -27,8 +27,6 @@ classifiers = [# https://pypi.org/classifiers/
     "Topic :: Software Development :: Libraries :: Python Modules",
 
     "Environment :: Web Environment",
-
-    "License :: OSI Approved :: MIT License",
 
     "Natural Language :: English",
     "Natural Language :: Spanish",
