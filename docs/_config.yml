@@ -1,0 +1,85 @@
+title: Alanube Python API Documentation
+description: Comprehensive documentation for the Alanube Python API client
+author: Alanube Team
+email: support@alanube.co
+
+# Site settings
+url: "https://wilmerm.github.io/alanube-python-api"
+baseurl: "/alanube-python-api"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "page"
+
+# Navigation
+nav:
+  - title: Home
+    url: /
+  - title: Installation
+    url: /installation/
+  - title: Usage
+    url: /usage/
+  - title: API Reference
+    url: /api-reference/
+  - title: Countries
+    url: /countries/
+  - title: Contributing
+    url: /contributing/
+
+# Footer
+footer:
+  links:
+    - title: GitHub
+      url: https://github.com/wilmerm/alanube-python-api
+    - title: PyPI
+      url: https://pypi.org/project/alanube/
+    - title: Issues
+      url: https://github.com/wilmerm/alanube-python-api/issues
+    - title: Alanube
+      url: https://www.alanube.co/
+
+# Social media
+social:
+  github: wilmerm/alanube-python-api
+  twitter: alanube_co
+
+# Analytics (optional)
+# google_analytics: UA-XXXXXXXXX-X
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - .github
+  - README.md
+  - LICENSE
+  - requirements.txt
+  - requirements-dev.txt
+  - pyproject.toml
+  - setup.cfg
+  - MANIFEST.in
+  - alanube/
+  - .gitignore 
