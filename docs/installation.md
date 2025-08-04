@@ -24,8 +24,8 @@ If you want to install the latest development version or contribute to the proje
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/wilmerm/alanube-python-api.git
-cd alanube-python-api
+git clone https://github.com/wilmerm/alanube-python.git
+cd alanube-python
 ```
 
 2. Create a virtual environment (recommended):
@@ -111,4 +111,4 @@ Alanube.connect(token, developer_mode=developer_mode)
 - Verify firewall settings
 - Try using a different network if available
 
-For more help, see our [troubleshooting guide](troubleshooting.md) or [open an issue](https://github.com/wilmerm/alanube-python-api/issues) on GitHub. 
+For more help, see our [troubleshooting guide](troubleshooting.md) or [open an issue](https://github.com/wilmerm/alanube-python/issues) on GitHub.

@@ -156,7 +156,7 @@ Edit `docs/_config.yml` to customize:
 # Site information
 title: "Alanube Python API Documentation"
 description: "Comprehensive documentation for the Alanube Python API client"
-url: "https://wilmerm.github.io/alanube-python-api"
+url: "https://wilmerm.github.io/alanube-python"
 
 # Navigation
 nav:
@@ -167,8 +167,8 @@ nav:
 
 # Social links
 social:
-  github: wilmerm/alanube-python-api
-  twitter: alanube_co
+  github: wilmerm/alanube-python
+  twitter: AlanubeRD
 ```
 
 ## 🔧 Deployment
@@ -180,7 +180,7 @@ The documentation is automatically deployed via GitHub Actions:
 1. **Trigger:** Push to main/master branch
 2. **Build:** Jekyll builds the site
 3. **Deploy:** Site is deployed to GitHub Pages
-4. **URL:** https://wilmerm.github.io/alanube-python-api
+4. **URL:** https://wilmerm.github.io/alanube-python/
 
 ### Manual Deployment
 
@@ -241,7 +241,7 @@ The site includes:
    ```bash
    # Check Jekyll version
    jekyll --version
-   
+
    # Clean and rebuild
    bundle exec jekyll clean
    bundle exec jekyll build
@@ -382,4 +382,4 @@ This documentation is licensed under the MIT License, same as the main project.
 
 **The documentation is now ready to help users effectively use the Alanube Python API! 🚀**
 
-For questions or improvements, please open an issue or submit a pull request. 
+For questions or improvements, please open an issue or submit a pull request.

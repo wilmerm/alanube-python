@@ -27,13 +27,13 @@ Thank you for your interest in contributing to the Alanube Python API! This guid
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/your-username/alanube-python-api.git
-   cd alanube-python-api
+   git clone https://github.com/your-username/alanube-python.git
+   cd alanube-python
    ```
 
 3. Add the upstream repository:
    ```bash
-   git remote add upstream https://github.com/wilmerm/alanube-python-api.git
+   git remote add upstream https://github.com/wilmerm/alanube-python.git
    ```
 
 ## Development Setup
@@ -172,22 +172,22 @@ When writing tests, follow these guidelines:
    from unittest.mock import patch, MagicMock
    from alanube.do import Alanube
    from alanube.do.exceptions import AlanubeException
-   
+
    class TestAlanubeAPI(unittest.TestCase):
        def setUp(self):
            """Set up test fixtures."""
            self.api_token = "test_token"
            Alanube.connect(self.api_token, developer_mode=True)
-       
+
        def tearDown(self):
            """Clean up after tests."""
            pass
-       
+
        def test_send_fiscal_invoice_success(self):
            """Test successful fiscal invoice sending."""
            # Test implementation
            pass
-       
+
        def test_send_fiscal_invoice_invalid_payload(self):
            """Test fiscal invoice with invalid payload."""
            # Test implementation
@@ -203,10 +203,10 @@ When writing tests, follow these guidelines:
        mock_response.status_code = 200
        mock_response.json.return_value = {"id": "test_id"}
        mock_post.return_value = mock_response
-       
+
        # Test the method
        result = Alanube.send_document(encf_type=31, payload={})
-       
+
        # Assertions
        self.assertEqual(result["id"], "test_id")
        mock_post.assert_called_once()
@@ -232,19 +232,19 @@ All public methods should have docstrings following Google style:
 ```python
 def send_document(self, encf_type: int, payload: dict) -> dict:
     """Send an electronic document of the specified type.
-    
+
     Args:
         encf_type (int): The type of the eNCF document.
         payload (dict): The data required to send the document.
-        
+
     Returns:
         dict: The response from the Alanube API containing document information.
-        
+
     Raises:
         ValidationError: If the payload is invalid.
         AuthenticationError: If authentication fails.
         AlanubeException: For other API errors.
-        
+
     Example:
         >>> payload = {"company_id": "123", "customer": {...}}
         >>> response = Alanube.send_document(31, payload)
@@ -435,4 +435,4 @@ Contributors will be recognized in:
 - Contributor hall of fame
 - GitHub contributors page
 
-Thank you for contributing to the Alanube Python API! 🚀 
+Thank you for contributing to the Alanube Python API! 🚀

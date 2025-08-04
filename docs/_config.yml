@@ -1,11 +1,11 @@
 title: Alanube Python API Documentation
 description: Comprehensive documentation for the Alanube Python API client
 author: Alanube Team
-email: support@alanube.co
+email: soporte@alanube.co
 
 # Site settings
-url: "https://wilmerm.github.io/alanube-python-api"
-baseurl: "/alanube-python-api"
+url: "https://wilmerm.github.io/alanube-python/"
+baseurl: "/alanube-python"
 
 # Build settings
 markdown: kramdown
@@ -50,18 +50,18 @@ nav:
 footer:
   links:
     - title: GitHub
-      url: https://github.com/wilmerm/alanube-python-api
+      url: https://github.com/wilmerm/alanube-python
     - title: PyPI
       url: https://pypi.org/project/alanube/
     - title: Issues
-      url: https://github.com/wilmerm/alanube-python-api/issues
+      url: https://github.com/wilmerm/alanube-python/issues
     - title: Alanube
       url: https://www.alanube.co/
 
 # Social media
 social:
-  github: wilmerm/alanube-python-api
-  twitter: alanube_co
+  github: wilmerm/alanube-python
+  twitter: AlanubeRD
 
 # Analytics (optional)
 # google_analytics: UA-XXXXXXXXX-X
@@ -82,4 +82,4 @@ exclude:
   - setup.cfg
   - MANIFEST.in
   - alanube/
-  - .gitignore 
+  - .gitignore

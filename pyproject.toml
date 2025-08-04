@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alanube"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name = "Wilmer Martinez" },
 ]
 description = "Python library to connect with Alanube API"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT"
 requires-python = ">=3.10"
 classifiers = [# https://pypi.org/classifiers/
 
@@ -27,8 +27,6 @@ classifiers = [# https://pypi.org/classifiers/
     "Topic :: Software Development :: Libraries :: Python Modules",
 
     "Environment :: Web Environment",
-
-    "License :: OSI Approved :: MIT License",
 
     "Natural Language :: English",
     "Natural Language :: Spanish",
@@ -62,4 +60,5 @@ keywords = [
 Homepage = "https://github.com/wilmerm/alanube-python"
 Issues = "https://github.com/wilmerm/alanube-python/issues"
 Repository = "https://github.com/wilmerm/alanube-python"
+Documentation = "https://wilmerm.github.io/alanube-python"
 
