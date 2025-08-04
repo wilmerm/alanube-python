@@ -64,6 +64,26 @@ For the missing countries, you can use the `do` directory as a reference to buil
 - [ ] 🇵🇪 Peru
 - [ ] 🇧🇴 Bolivia
 
+## Used by
+
+This library is trusted and used in production by:
+
+<table>
+  <tr>
+    <td align="center" width="250">
+      <a href="https://www.unolet.com" target="_blank">
+        <img src="https://cdn.unolet.com/img/unolet/unolet-logo.svg" width="120px" alt="Unolet Logo"/><br/>
+        <b>Unolet</b>
+      </a>
+      <br/>
+      <sub><i>ERP and electronic invoicing platform for SMEs.</i></sub>
+    </td>
+  </tr>
+</table>
+
+If your company uses this library and would like to be listed here, feel free to [open a pull request](https://github.com/wilmerm/alanube-python/pulls) or [create an issue](https://github.com/wilmerm/alanube-python/issues).
+
+
 ## Developers
 
 If you're contributing to the development of this library, here are the steps to set up your environment and run the tests:
