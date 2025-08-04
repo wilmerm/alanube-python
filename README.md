@@ -147,15 +147,22 @@ To compile and upload the library to PyPI, follow these steps:
 ## Credits
 
 <table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/wilmerm">
-        <img src="https://github.com/wilmerm.png" width="100px;" alt="Wilmer Martinez"/><br />
-        <sub><b>Wilmer Martinez</b></sub>
-      </a>
-      <br/>Author & Maintainer
-    </td>
-  </tr>
+    <tr>
+        <td align="center">
+            <a href="https://github.com/wilmerm">
+                <img src="https://github.com/wilmerm.png" width="100px;" alt="Wilmer Martinez"/><br />
+                <sub><b>Wilmer Martinez</b></sub>
+            </a>
+            <br/>Author & Maintainer
+        </td>
+        <td align="center">
+            <a href="https://github.com/Bamidele123456">
+                <img src="https://github.com/Bamidele123456.png" width="100px;" alt="Oriku Precious"/><br />
+                <sub><b>Oriku Precious</b></sub>
+            </a>
+            <br/>Documentation Contributor
+        </td>
+    </tr>
 </table>
 
 If you contributed to this project and would like to be listed here, feel free to open a pull request adding yourself to the credits section.
@@ -175,9 +182,7 @@ We welcome pull requests and suggestions. Please open an issue or submit a PR.
 
 ## Support 💗
 
-If you find this useful, consider supporting:
-
-[Donate on PayPal](https://paypal.me/martinezwilmer?country.x=DO&locale.x=es_XC)
+If you find this useful, consider supporting.
 
 Your generosity helps us to continue improving and maintaining this project. We appreciate every contribution, however small. Thanks for being part of our community!
 
