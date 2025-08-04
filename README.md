@@ -73,8 +73,8 @@ If you're contributing to the development of this library, here are the steps to
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/wilmerm/alanube-python-api.git
-    cd alanube-python-api
+    git clone https://github.com/wilmerm/alanube-python.git
+    cd alanube-python
     ```
 
 2. Create a virtual environment (optional but recommended):

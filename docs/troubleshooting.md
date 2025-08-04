@@ -67,10 +67,10 @@ TypeError: 'module' object is not callable
    # On Ubuntu/Debian
    sudo apt update
    sudo apt install python3.10
-   
+
    # On macOS with Homebrew
    brew install python@3.10
-   
+
    # On Windows, download from python.org
    ```
 
@@ -126,7 +126,7 @@ alanube.do.exceptions.AuthenticationError: Token expired
    ```python
    import os
    from dotenv import load_dotenv
-   
+
    load_dotenv()
    token = os.getenv('ALANUBE_TOKEN')
    Alanube.connect(token, developer_mode=True)
@@ -152,7 +152,7 @@ requests.exceptions.ConnectTimeout: HTTPSConnectionPool
    ```python
    import requests
    from alanube.do import Alanube
-   
+
    # Set longer timeout
    requests.adapters.DEFAULT_RETRIES = 5
    ```
@@ -161,7 +161,7 @@ requests.exceptions.ConnectTimeout: HTTPSConnectionPool
    ```python
    import time
    from alanube.do.exceptions import AlanubeException
-   
+
    def send_with_retry(payload, max_retries=3):
        for attempt in range(max_retries):
            try:
@@ -187,7 +187,7 @@ requests.exceptions.SSLError: SSL certificate verification failed
    # On Ubuntu/Debian
    sudo apt update
    sudo apt install ca-certificates
-   
+
    # On macOS
    brew install ca-certificates
    ```
@@ -201,7 +201,7 @@ requests.exceptions.SSLError: SSL certificate verification failed
    ```python
    import ssl
    import requests
-   
+
    # Disable SSL verification (use only for testing)
    ssl._create_default_https_context = ssl._create_unverified_context
    ```
@@ -266,7 +266,7 @@ NotImplementedError: No implementation for eNCF type: 99
    # Supported document types
    SUPPORTED_TYPES = {
        31: "Fiscal Invoice",
-       32: "Invoice", 
+       32: "Invoice",
        33: "Debit Note",
        34: "Credit Note",
        41: "Purchase",
@@ -305,15 +305,15 @@ alanube.do.exceptions.ValidationError: Invalid RNC format
 2. **Validate RNC:**
    ```python
    import re
-   
+
    def validate_rnc(rnc):
        # Remove any non-digit characters
        rnc_clean = re.sub(r'\D', '', str(rnc))
-       
+
        # Check length
        if len(rnc_clean) not in [9, 11]:
            raise ValueError("RNC must be 9 or 11 digits")
-       
+
        return rnc_clean
    ```
 
@@ -330,7 +330,7 @@ alanube.do.exceptions.ValidationError: Invalid tax rate
    ```python
    # Valid tax rates for Dominican Republic
    VALID_TAX_RATES = [0.0, 18.0]  # 0% and 18%
-   
+
    # Check tax rate
    if tax_rate not in VALID_TAX_RATES:
        raise ValueError(f"Tax rate must be one of {VALID_TAX_RATES}")
@@ -369,7 +369,7 @@ alanube.do.exceptions.ValidationError: Invalid tax rate
 2. **Use Connection Pooling:**
    ```python
    import requests
-   
+
    # Create a session for connection pooling
    session = requests.Session()
    session.mount('https://', requests.adapters.HTTPAdapter(
@@ -381,7 +381,7 @@ alanube.do.exceptions.ValidationError: Invalid tax rate
 3. **Implement Caching:**
    ```python
    import functools
-   
+
    @functools.lru_cache(maxsize=128)
    def get_company_info(company_id):
        return Alanube.get_company(company_id)
@@ -400,7 +400,7 @@ alanube.do.exceptions.RateLimitError: Rate limit exceeded
    ```python
    import time
    import random
-   
+
    def send_with_backoff(payload, max_retries=5):
        for attempt in range(max_retries):
            try:
@@ -418,7 +418,7 @@ alanube.do.exceptions.RateLimitError: Rate limit exceeded
    # Instead of sending multiple requests quickly
    # Batch them or add delays
    import time
-   
+
    for payload in payloads:
        response = Alanube.send_document(encf_type=31, payload=payload)
        time.sleep(1)  # Add delay between requests
@@ -472,7 +472,7 @@ Alanube.connect(token, developer_mode=False)  # Production
    - Read [Installation Guide](installation.md)
 
 2. **Search Existing Issues:**
-   - Check [GitHub Issues](https://github.com/wilmerm/alanube-python-api/issues)
+   - Check [GitHub Issues](https://github.com/wilmerm/alanube-python/issues)
    - Search for similar problems
 
 3. **Reproduce the Issue:**
@@ -524,7 +524,7 @@ Any other relevant information
 
 ### Support Channels
 
-1. **GitHub Issues:** [Create an issue](https://github.com/wilmerm/alanube-python-api/issues)
+1. **GitHub Issues:** [Create an issue](https://github.com/wilmerm/alanube-python/issues)
 2. **Documentation:** Check this troubleshooting guide
 3. **Alanube Support:** [Contact Alanube](https://www.alanube.co/)
 4. **Community:** Check discussions and existing issues
@@ -541,4 +541,4 @@ Any other relevant information
 | SSL Issues | Update certificates |
 | RNC Issues | Validate RNC format |
 
-Remember to always test in sandbox mode first before using production! 
+Remember to always test in sandbox mode first before using production!
