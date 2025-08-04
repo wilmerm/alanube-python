@@ -54,9 +54,28 @@ Information about supported countries and their specific features.
 
 - 🇩🇴 **Dominican Republic (DGII)** - ✅ Fully implemented
 - 🇵🇦 Panama - 🚧 Planned
-- 🇨🇷 Costa Rica - 🚧 Planned  
+- 🇨🇷 Costa Rica - 🚧 Planned
 - 🇵🇪 Peru - 🚧 Planned
 - 🇧🇴 Bolivia - 🚧 Planned
+
+## 🤝 Used by
+
+This library is trusted and used in production by:
+
+<table>
+  <tr>
+    <td align="center" width="250">
+      <a href="https://www.unolet.com" target="_blank">
+        <img src="https://cdn.unolet.com/img/unolet/unolet-logo.svg" width="120px" alt="Unolet Logo"/><br/>
+        <b>Unolet</b>
+      </a>
+      <br/>
+      <sub><i>ERP and electronic invoicing platform for SMEs.</i></sub>
+    </td>
+  </tr>
+</table>
+
+If your company uses this library and would like to be listed here, feel free to [open a pull request](https://github.com/wilmerm/alanube-python/pulls) or [create an issue](https://github.com/wilmerm/alanube-python/issues).
 
 ## 🔧 Features
 
@@ -99,4 +118,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Ready to get started?** Check out our [Installation Guide](installation.md) to begin using the Alanube Python API! 
+**Ready to get started?** Check out our [Installation Guide](installation.md) to begin using the Alanube Python API!
