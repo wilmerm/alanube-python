@@ -158,11 +158,11 @@ class APIConfig:
 
     @property
     def endpoint_reports_companies_accepted_documents_monthly(self):
-        return "%s%s" % (self.endpoint_reports_companies_accepted_documents, "/monthly")
+        return f"{self.endpoint_reports_companies_accepted_documents}/monthly"
 
     @property
     def endpoint_reports_companies_accepted_documents_15_days(self):
-        return "%s%s" % (self.endpoint_reports_companies_accepted_documents, "/15-days")
+        return f"{self.endpoint_reports_companies_accepted_documents}/15-days"
 
 
 class AlanubeAPI:
