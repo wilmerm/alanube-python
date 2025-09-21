@@ -41,6 +41,15 @@ class Alanube:
     - `send_document`: Send an electronic document of the specified type.
     - `get_document`: Retrieve the status of an electronic document of the specified type.
     - `get_documents`: Retrieve a list of electronic documents of the specified type.
+    - `get_document_status`: (Deprecated) Retrieve the status of an electronic document.
+    - `get_report_companies_documents_total`: Get a report of total documents for companies.
+    - `get_report_users_documents_total`: Get a report of total documents for users.
+    - `get_report_company_emitted_documents`: Get total emitted documents for a specific company.
+    - `get_company_emitted_documents_monthly`: Get monthly emitted documents for a specific company.
+    - `get_company_emitted_documents_15_days`: Get emitted documents for a specific company in the last 15 days.
+    - `get_company_accepted_documents`: Get total accepted documents for a specific company.
+    - `get_company_accepted_documents_monthly`: Get monthly accepted documents for a specific company.
+    - `get_company_accepted_documents_15_days`: Get accepted documents for a specific company in the last 15 days.
     """
     exceptions = exceptions
     create_company = AlanubeAPI.create_company
@@ -53,6 +62,14 @@ class Alanube:
     get_cancellation = AlanubeAPI.get_cancellation
     get_cancellations = AlanubeAPI.get_cancellations
     send_cancellation = AlanubeAPI.send_cancellation
+    get_report_companies_documents_total = AlanubeAPI.get_report_companies_documents_total
+    get_report_users_documents_total = AlanubeAPI.get_report_users_documents_total
+    get_report_company_emitted_documents = AlanubeAPI.get_report_company_emitted_documents
+    get_report_company_emitted_documents_monthly = AlanubeAPI.get_report_company_emitted_documents_monthly
+    get_report_company_emitted_documents_15_days = AlanubeAPI.get_report_company_emitted_documents_15_days
+    get_report_company_accepted_documents = AlanubeAPI.get_report_company_accepted_documents
+    get_report_company_accepted_documents_monthly = AlanubeAPI.get_report_company_accepted_documents_monthly
+    get_report_company_accepted_documents_15_days = AlanubeAPI.get_report_company_accepted_documents_15_days
 
     send_document_func_map = {
         31: AlanubeAPI.send_fiscal_invoice,
