@@ -134,27 +134,27 @@ class APIConfig:
 
     @property
     def endpoint_reports_companies_documents_total(self):
-        return "%s%s" % (self.api_url, "/reports/companies/{idCompany}/documents/total")
+        return f"{self.api_url}/reports/companies/{{idCompany}}/documents/total"
 
     @property
     def endpoint_reports_users_documents_total(self):
-        return "%s%s" % (self.api_url, "/reports/users/documents/total")
+        return f"{self.api_url}/reports/users/documents/total"
 
     @property
     def endpoint_reports_companies_emitted_documents(self):
-        return "%s%s" % (self.api_url, "/companies/{id}/emitted-documents")
+        return f"{self.api_url}/companies/{{id}}/emitted-documents"
 
     @property
     def endpoint_reports_companies_emitted_documents_monthly(self):
-        return "%s%s" % (self.endpoint_reports_companies_emitted_documents, "/monthly")
+        return f"{self.endpoint_reports_companies_emitted_documents}/monthly"
 
     @property
     def endpoint_reports_companies_emitted_documents_15_days(self):
-        return "%s%s" % (self.endpoint_reports_companies_emitted_documents, "/15-days")
+        return f"{self.endpoint_reports_companies_emitted_documents}/15-days"
 
     @property
     def endpoint_reports_companies_accepted_documents(self):
-        return "%s%s" % (self.api_url, "/companies/{id}/accepted-documents")
+        return f"{self.api_url}/companies/{{id}}/accepted-documents"
 
     @property
     def endpoint_reports_companies_accepted_documents_monthly(self):
