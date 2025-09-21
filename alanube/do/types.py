@@ -91,9 +91,7 @@ class ReportCompaniesDocumentsTotalResponse(TypedDict):
     data: ReportCompaniesDocumentsTotalData
 
 
-class Companies(TypedDict):
-    # El key es el company_id
-    __root__: Dict[str, ReportCompaniesDocumentsTotalData]
+Companies = Dict[str, ReportCompaniesDocumentsTotalData] # El key es el company_id
 
 
 class ReportUsersDocumentsTotalData(TypedDict):
