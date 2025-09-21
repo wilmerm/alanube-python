@@ -1,4 +1,4 @@
-from typing import TypedDict, List, Literal
+from typing import Dict, TypedDict, List, Literal
 
 
 class Metadata(TypedDict):
@@ -71,3 +71,75 @@ class ReceivedDocumentsResponse(TypedDict):
 class ListReceivedDocumentsResponse(TypedDict):
     metadata: Metadata
     documents: List[ReceivedDocumentsResponse]
+
+
+class ReportCompaniesDocumentsTotalData(TypedDict):
+    totalEmittedDocuments: int
+    fiscalInvoices: int
+    invoices: int
+    creditNotes: int
+    debitNotes: int
+    exportSupports: int
+    gubernamentals: int
+    minorExpenses: int
+    paymentAbroadSupports: int
+    purchases: int
+    specialRegimes: int
+
+
+class ReportCompaniesDocumentsTotalResponse(TypedDict):
+    data: ReportCompaniesDocumentsTotalData
+
+
+class Companies(TypedDict):
+    # El key es el company_id
+    __root__: Dict[str, ReportCompaniesDocumentsTotalData]
+
+
+class ReportUsersDocumentsTotalData(TypedDict):
+    totalEmittedDocuments: int
+    companies: Dict[str, ReportCompaniesDocumentsTotalData]
+
+
+class ReportUsersDocumentsTotalResponse(TypedDict):
+    data: ReportUsersDocumentsTotalData
+
+
+class MonthlyQuantity(TypedDict):
+    year: int
+    month: int
+    quantity: int
+
+
+class ReportDocumentsStatsMonthly(TypedDict):
+    totalEmittedDocuments: List[MonthlyQuantity]
+    fiscalInvoices: List[MonthlyQuantity]
+    invoices: List[MonthlyQuantity]
+    creditNotes: List[MonthlyQuantity]
+    debitNotes: List[MonthlyQuantity]
+    exportSupports: List[MonthlyQuantity]
+    gubernamentals: List[MonthlyQuantity]
+    minorExpenses: List[MonthlyQuantity]
+    paymentAbroadSupports: List[MonthlyQuantity]
+    purchases: List[MonthlyQuantity]
+    specialRegimes: List[MonthlyQuantity]
+
+
+class DailyQuantity(TypedDict):
+    month: int
+    day: int
+    quantity: int
+
+
+class ReportDocumentsStatsDaily(TypedDict):
+    totalEmittedDocuments: List[DailyQuantity]
+    fiscalInvoices: List[DailyQuantity]
+    invoices: List[DailyQuantity]
+    creditNotes: List[DailyQuantity]
+    debitNotes: List[DailyQuantity]
+    exportSupports: List[DailyQuantity]
+    gubernamentals: List[DailyQuantity]
+    minorExpenses: List[DailyQuantity]
+    paymentAbroadSupports: List[DailyQuantity]
+    purchases: List[DailyQuantity]
+    specialRegimes: List[DailyQuantity]
