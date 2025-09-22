@@ -246,10 +246,10 @@ def send_document(self, encf_type: int, payload: dict) -> dict:
         AlanubeException: For other API errors.
 
     Example:
-        >>> payload = {"company_id": "123", "customer": {...}}
-        >>> response = Alanube.send_document(31, payload)
-        >>> print(response["document_number"])
-        'B0100000001'
+        >>> payload = {"company": {...}, "idDoc": {...}, "sender": {...}, "buyer": {...}, ...}
+        >>> data = Alanube.send_document(31, payload)
+        >>> print(data['encf'])
+        'E310000000000001'
     """
     pass
 ```
@@ -260,7 +260,6 @@ When adding new features or changing existing ones:
 
 1. **Update docstrings** for all modified methods
 2. **Update README.md** if adding new features
-3. **Update API reference** in `docs/api-reference.md`
 4. **Add usage examples** in `docs/usage.md`
 5. **Update installation guide** if needed
 
@@ -362,12 +361,6 @@ Closes #(issue number)
 
 ```markdown
 ## Bug Report
-
-### Environment
-- Python version: 3.10.0
-- Alanube version: 1.0.0
-- Operating system: Windows 10
-- Country: Dominican Republic
 
 ### Description
 Clear and concise description of the bug.

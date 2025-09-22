@@ -14,10 +14,8 @@ docs/
 ├── index.md                 # Home page
 ├── installation.md          # Installation guide
 ├── usage.md                 # Usage examples
-├── api-reference.md         # API reference
 ├── countries.md             # Country support guide
 ├── contributing.md          # Contributing guide
-├── troubleshooting.md       # Troubleshooting guide
 └── README.md               # This file
 ```
 
@@ -30,11 +28,11 @@ docs/
    # On macOS
    brew install ruby
    gem install jekyll bundler
-   
+
    # On Ubuntu/Debian
    sudo apt install ruby-full build-essential
    gem install jekyll bundler
-   
+
    # On Windows
    # Download Ruby from rubyinstaller.org
    gem install jekyll bundler
@@ -73,9 +71,9 @@ The built site will be in `docs/_site/`.
    title: New Page Title
    description: Brief description of the page
    ---
-   
+
    # New Page Title
-   
+
    Your content here...
    ```
 
@@ -100,7 +98,7 @@ The built site will be in `docs/_site/`.
    ```markdown
    ```python
    from alanube.do import Alanube
-   
+
    Alanube.connect("token", developer_mode=True)
    ```
    ```
@@ -115,9 +113,9 @@ The built site will be in `docs/_site/`.
 4. **Use Alerts for Important Information:**
    ```markdown
    > **Note:** Important information here.
-   
+
    > **Warning:** Warning message here.
-   
+
    > **Tip:** Helpful tip here.
    ```
 
@@ -199,7 +197,7 @@ To add Google Analytics:
    ```bash
    # Check Jekyll version
    jekyll --version
-   
+
    # Clean and rebuild
    jekyll clean
    jekyll build
@@ -215,7 +213,7 @@ To add Google Analytics:
    ```bash
    # Use different port
    jekyll serve --port 4001
-   
+
    # Bind to all interfaces
    jekyll serve --host 0.0.0.0
    ```
@@ -266,4 +264,4 @@ This documentation is licensed under the same license as the main project (MIT).
 
 ---
 
-**Happy documenting! 📚✨** 
+**Happy documenting! 📚✨**

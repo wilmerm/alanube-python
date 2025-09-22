@@ -12,6 +12,11 @@ from .types import (
     ListDocumentResponse,
     ListReceivedDocumentsResponse,
     ReceivedDocumentsResponse,
+    ReportCompaniesDocumentsTotalData,
+    ReportCompaniesDocumentsTotalResponse,
+    ReportDocumentsStatsDaily,
+    ReportDocumentsStatsMonthly,
+    ReportUsersDocumentsTotalResponse,
 )
 
 
@@ -126,6 +131,38 @@ class APIConfig:
           parameter is also provided, it takes precedence over this parameter.
         """
         return f"{self.api_url}/check-dgii-status"
+
+    @property
+    def endpoint_reports_companies_documents_total(self):
+        return f"{self.api_url}/reports/companies/{{idCompany}}/documents/total"
+
+    @property
+    def endpoint_reports_users_documents_total(self):
+        return f"{self.api_url}/reports/users/documents/total"
+
+    @property
+    def endpoint_reports_companies_emitted_documents(self):
+        return f"{self.api_url}/companies/{{id}}/emitted-documents"
+
+    @property
+    def endpoint_reports_companies_emitted_documents_monthly(self):
+        return f"{self.endpoint_reports_companies_emitted_documents}/monthly"
+
+    @property
+    def endpoint_reports_companies_emitted_documents_15_days(self):
+        return f"{self.endpoint_reports_companies_emitted_documents}/15-days"
+
+    @property
+    def endpoint_reports_companies_accepted_documents(self):
+        return f"{self.api_url}/companies/{{id}}/accepted-documents"
+
+    @property
+    def endpoint_reports_companies_accepted_documents_monthly(self):
+        return f"{self.endpoint_reports_companies_accepted_documents}/monthly"
+
+    @property
+    def endpoint_reports_companies_accepted_documents_15_days(self):
+        return f"{self.endpoint_reports_companies_accepted_documents}/15-days"
 
 
 class AlanubeAPI:
@@ -766,11 +803,11 @@ class AlanubeAPI:
     @classmethod
     def get_received_documents(
         cls,
-        company_id=None,
-        limit=25,
-        page=1,
-        start=None,
-        end=None,
+        company_id: str = None,
+        limit: int = 25,
+        page: int = 1,
+        start: str = None,
+        end: str = None,
     ) -> ListReceivedDocumentsResponse:
         """
         Consultar varios 'documentos recibidos'
@@ -785,6 +822,10 @@ class AlanubeAPI:
         - `end`: Fecha de fin de la consulta basada en la fecha de emisión del
             documento(s). Formato: YYYY-MM-DD. Si no se envía, se tomará la
             fecha actual en zona horaria UTC.
+
+        Retorna:
+        - response (ListReceivedDocumentsResponse): La respuesta de la API con
+            la lista de documentos recibidos.
         """
         url = cls.config.endpoint_received_documents
         url = build_url(url, company_id=company_id, limit=limit, page=page, start=start, end=end)
@@ -835,9 +876,141 @@ class AlanubeAPI:
             mantenimiento para los servicios de factura electrónica de la DGII.
             Si también se proporciona el parámetro 'environment', este tiene
             prioridad sobre este parámetro.
+
+        Retorna:
+        - data (dict o list): El estado del servicio o las ventanas de
+            mantenimiento de la DGII.
         """
         url = cls.config.endpoint_check_dgii_status
         url = build_url(url, company_id, environment=environment, maintenance=maintenance)
         response = cls.get(url, expected_response_code=200)
         data = response.json()
         return data
+
+    @classmethod
+    def get_report_companies_documents_total(
+        cls,
+        company_id: str,
+        legal_status: str,
+        date_from: str = None,
+        date_until: str = None,
+    ) -> ReportCompaniesDocumentsTotalResponse:
+        """
+        Obtiene el total de documentos electrónicos emitidos por una compañía
+        específica en un rango de fechas y estados legales determinados.
+
+        Parámetros:
+        -----------
+        - company_id (str): Id de la compañía para la cual se desean consultar los totales.
+        - legal_status (str): Lista de estados legales de los documentos emitidos separados por comas.
+        - date_from (str, opcional): Fecha de inicio del rango de fechas.
+            Si no se especifica, se toma la fecha actual menos 30 días
+        - date_until (str, opcional): Fecha de fin del rango de fechas.
+            Si no se especifica, se toma la fecha actual.
+        """
+        url = cls.config.endpoint_reports_companies_documents_total.format(idCompany=company_id)
+        url = build_url(url, legal_status=legal_status, date_from=date_from, date_until=date_until)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_users_documents_total(
+        cls,
+        legal_status: str = None,
+        date_from: str = None,
+        date_until: str = None,
+    ) -> ReportUsersDocumentsTotalResponse:
+        """
+        Obtiene el total de documentos electrónicos emitidos por el usuario
+        autenticado en un rango de fechas y estados legales determinados.
+
+        Parámetros:
+        -----------
+        - legal_status (str, opcional): Lista de estados legales de los
+            documentos emitidos separados por comas.
+        - date_from (str, opcional): Fecha de inicio del rango de fechas.
+            Si no se especifica, se toma la fecha actual menos 30 días.
+        - date_until (str, opcional): Fecha de fin del rango de fechas.
+            Si no se especifica, se toma la fecha actual.
+        """
+        url = cls.config.endpoint_reports_users_documents_total
+        url = build_url(url, legal_status=legal_status, date_from=date_from, date_until=date_until)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_company_emitted_documents(
+        cls,
+        company_id: str,
+    ) -> ReportCompaniesDocumentsTotalData:
+        """
+        Consulta el total de documentos electrónicos emitidos por una compañía específica.
+        """
+        url = cls.config.endpoint_reports_companies_emitted_documents.format(id=company_id)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_company_emitted_documents_monthly(
+        cls,
+        company_id: str,
+    ) -> ReportDocumentsStatsMonthly:
+        """
+        Consulta el total de documentos electrónicos emitidos por una compañía
+        específica durante los últimos 12 meses.
+        """
+        url = cls.config.endpoint_reports_companies_emitted_documents_monthly.format(id=company_id)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_company_emitted_documents_15_days(
+        cls,
+        company_id: str,
+    ) -> ReportDocumentsStatsDaily:
+        """
+        Consulta el total de documentos electrónicos emitidos por una compañía
+        específica durante los últimos 15 días.
+        """
+        url = cls.config.endpoint_reports_companies_emitted_documents_15_days.format(id=company_id)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_company_accepted_documents(
+        cls,
+        company_id: str,
+    ) -> ReportCompaniesDocumentsTotalData:
+        """
+        Consulta el total de documentos electrónicos aceptados por la DGII
+        para una compañía específica.
+        """
+        url = cls.config.endpoint_reports_companies_accepted_documents.format(id=company_id)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_company_accepted_documents_monthly(
+        cls,
+        company_id: str,
+    ) -> ReportDocumentsStatsMonthly:
+        """
+        Consulta el total de documentos electrónicos aceptados por la DGII
+        para una compañía específica durante los últimos 12 meses.
+        """
+        url = cls.config.endpoint_reports_companies_accepted_documents_monthly.format(id=company_id)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
+
+    @classmethod
+    def get_report_company_accepted_documents_15_days(
+        cls,
+        company_id: str,
+    ) -> ReportDocumentsStatsDaily:
+        """
+        Consulta el total de documentos electrónicos aceptados por la DGII
+        para una compañía específica durante los últimos 15 días.
+        """
+        url = cls.config.endpoint_reports_companies_accepted_documents_15_days.format(id=company_id)
+        response = cls.get(url, expected_response_code=200)
+        return response.json()
