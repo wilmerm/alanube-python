@@ -234,7 +234,7 @@ To add support for a new country, follow these guidelines:
    ```python
    # alanube/pa/__init__.py (for Panama)
    from .api import AlanubeAPI
-   
+
    class Alanube:
        # Implement country-specific methods
        pass
@@ -269,7 +269,7 @@ To add support for a new country, follow these guidelines:
    ```python
    # alanube/pa/types.py
    from dataclasses import dataclass
-   
+
    @dataclass
    class DocumentResponse:
        # Country-specific response structure
@@ -280,7 +280,7 @@ To add support for a new country, follow these guidelines:
    ```python
    # alanube/pa/tests/test_api.py
    import unittest
-   
+
    class TestPanamaAPI(unittest.TestCase):
        def test_send_document(self):
            # Test implementation
@@ -338,7 +338,6 @@ For each new country implementation:
 2. **Installation Guide**
    - Country-specific setup instructions
    - Configuration requirements
-   - Troubleshooting guide
 
 3. **Usage Examples**
    - Common use cases
@@ -394,4 +393,4 @@ To contribute to country implementations:
 5. Update documentation
 6. Submit a pull request
 
-For more information about contributing, see the [Contributing Guide](contributing.md). 
+For more information about contributing, see the [Contributing Guide](contributing.md).

@@ -89,7 +89,6 @@ Alanube.connect(token, developer_mode=developer_mode)
 ## Next Steps
 
 - Read the [Usage Examples](usage.md) to learn how to use the library
-- Check the [API Reference](api-reference.md) for detailed method documentation
 - Explore [Country Support](countries.md) to see what features are available
 
 ## Troubleshooting
@@ -110,5 +109,3 @@ Alanube.connect(token, developer_mode=developer_mode)
 - Check your internet connection
 - Verify firewall settings
 - Try using a different network if available
-
-For more help, see our [troubleshooting guide](troubleshooting.md) or [open an issue](https://github.com/wilmerm/alanube-python/issues) on GitHub.
