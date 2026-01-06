@@ -10,6 +10,7 @@ Classes:
 __version__ = "1.1.0"
 
 
+from typing import Optional
 import warnings
 
 from . import exceptions
@@ -150,7 +151,7 @@ class Alanube:
         return func(payload)
 
     @staticmethod
-    def get_document(encf_type: int, document_id: str, company_id: str = None):
+    def get_document(encf_type: int, document_id: str, company_id: Optional[str] = None):
         """
         Retrieve the status of an electronic document of the specified type
         from the Alanube API.
@@ -174,14 +175,14 @@ class Alanube:
     @staticmethod
     def get_documents(
         encf_type: int,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ):
         """
         Retrieve a list of electronic documents of the specified type from the Alanube API.
@@ -215,7 +216,7 @@ class Alanube:
         )
 
     @staticmethod
-    def get_document_status(encf_type: int, document_id: str, company_id: str = None):
+    def get_document_status(encf_type: int, document_id: str, company_id: Optional[str] = None):
         warnings.warn("This method is deprecated. Use `get_document` instead.", DeprecationWarning)
         return Alanube.get_document(encf_type, document_id, company_id)
 
