@@ -7,9 +7,6 @@ Classes:
     Alanube: Main class to interact with the Alanube API.
 """
 
-__version__ = "1.1.0"
-
-
 from typing import Optional
 import warnings
 
