@@ -3,10 +3,17 @@ import requests
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from alanube.utils import build_url
 from .exceptions import handle_response_error
+from .validators import (
+    validate_document_status,
+    validate_environment,
+    validate_identification_number,
+    validate_legal_status,
+    validate_pagination,
+)
 from .types import (
     DocumentResponse,
     ListDocumentResponse,
@@ -166,7 +173,7 @@ class APIConfig:
 
 
 class AlanubeAPI:
-    config: APIConfig = None
+    config: APIConfig
 
     @classmethod
     def connect(cls, token: str, developer_mode: bool = False, api_version: str = "v1"):
@@ -228,7 +235,7 @@ class AlanubeAPI:
         return AlanubeAPI.process_response(response, expected_response_code=expected_response_code)
 
     @staticmethod
-    def process_response(response: requests.Response, expected_response_code: int = None):
+    def process_response(response: requests.Response, expected_response_code: Optional[int] = None):
         handle_response_error(response, expected_response_code=expected_response_code)
         logger.info(f"Response: {response.status_code}")
         try:
@@ -245,7 +252,7 @@ class AlanubeAPI:
         elif isinstance(value, (date, datetime)):
             return value.isoformat()
         elif isinstance(value, Decimal):
-            return float(value)  # Alanube require un número
+            return float(value)  # API expects numbers as floats
         elif isinstance(value, (list, tuple)):
             return [cls.serialize(v) for v in value]
         elif isinstance(value, dict):
@@ -254,6 +261,19 @@ class AlanubeAPI:
             return {k: cls.serialize(v) for k, v in value.__dict__.items() if not k.startswith('_')}
         else:
             return value
+
+    @staticmethod
+    def _validate_document_list_params(status=None, legal_status=None, limit: int = 25, page: int = 1):
+        status = validate_document_status(status)
+        legal_status = validate_legal_status(legal_status)
+        validate_pagination(limit, page)
+        return status, legal_status
+
+    @staticmethod
+    def _validate_required_legal_status(legal_status):
+        result = validate_legal_status(legal_status, required=True)
+        assert result is not None  # logic guard for mypy type checker because of required=True
+        return result
 
     @classmethod
     def create_company(cls, payload: Dict) -> Dict[str, Any]:
@@ -265,7 +285,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def update_company(cls, payload: Dict, company_id: str = None) -> Dict[str, Any]:
+    def update_company(cls, payload: Dict, company_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Actualizar la información de una empresa
 
@@ -278,7 +298,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_company(cls, company_id: str = None) -> Dict[str, Any]:
+    def get_company(cls, company_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Consultar la información de una empresa
         """
@@ -296,7 +316,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_fiscal_invoice(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_fiscal_invoice(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado de la Factura de Crédito Fiscal Electrónica (31)
         """
@@ -307,18 +327,19 @@ class AlanubeAPI:
     @classmethod
     def get_fiscal_invoices(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar las Facturas de Crédito Fiscal Electrónicas (31)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_fiscal_invoices,
             company_id,
@@ -343,7 +364,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_invoice(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_invoice(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado de la Factura de Consumo Electrónica (32)
         """
@@ -354,18 +375,19 @@ class AlanubeAPI:
     @classmethod
     def get_invoices(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar las Facturas de Consumo Electrónicas (32)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_invoices,
             company_id,
@@ -390,7 +412,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_debit_note(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_debit_note(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado de la Nota de Débito Electrónica (33)
         """
@@ -401,18 +423,19 @@ class AlanubeAPI:
     @classmethod
     def get_debit_notes(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar las Notas de Débito Electrónicas (33)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_debit_notes,
             company_id,
@@ -437,7 +460,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_credit_note(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_credit_note(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado de la Nota de Crédito Electrónica (34)
         """
@@ -448,18 +471,19 @@ class AlanubeAPI:
     @classmethod
     def get_credit_notes(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar las Notas de Crédito Electrónicas (34)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_credit_notes,
             company_id,
@@ -484,7 +508,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_purchase(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_purchase(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado del Documento de Compra Electrónico (41)
         """
@@ -495,18 +519,19 @@ class AlanubeAPI:
     @classmethod
     def get_purchases(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar los documentos de Compra Electrónicos (41)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_purchases,
             company_id,
@@ -531,7 +556,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_minor_expense(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_minor_expense(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado del Documento de Gasto Menor Electrónico (43)
         """
@@ -542,18 +567,19 @@ class AlanubeAPI:
     @classmethod
     def get_minor_expenses(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar los documentos de Gasto Menor Electrónicos (43)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_minorexpenses,
             company_id,
@@ -578,7 +604,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_special_regime(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_special_regime(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado del Documento de Régimen Especial Electrónico (44)
         """
@@ -589,18 +615,19 @@ class AlanubeAPI:
     @classmethod
     def get_special_regimes(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar los documentos de Régimen Especial Electrónicos (44)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_special_regimes,
             company_id,
@@ -625,7 +652,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_gubernamental(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_gubernamental(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado del Documento Gubernamental Electrónico (45)
         """
@@ -636,18 +663,19 @@ class AlanubeAPI:
     @classmethod
     def get_gubernamentals(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar los documentos Gubernamentales Electrónicos (45)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_gubernamentals,
             company_id,
@@ -672,7 +700,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_export_support(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_export_support(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado del Documento de Soporte de Exportación Electrónico (46)
         """
@@ -683,18 +711,19 @@ class AlanubeAPI:
     @classmethod
     def get_export_supports(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar los documentos de Soporte de Exportación Electrónico (46)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_export_supports,
             company_id,
@@ -719,7 +748,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_payment_abroad_support(cls, id_: str, company_id: str = None) -> DocumentResponse:
+    def get_payment_abroad_support(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
         """
         Consultar el estado del Documento de Soporte de Pagos al Exterior Electrónico (47)
         """
@@ -730,18 +759,19 @@ class AlanubeAPI:
     @classmethod
     def get_payment_abroad_supports(
         cls,
-        company_id: str = None,
-        status: str = None,
-        legal_status: str = None,
-        document_number: str = None,
+        company_id: Optional[str] = None,
+        status: Optional[str] = None,
+        legal_status: Optional[str] = None,
+        document_number: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: int = None,
-        end: int = None,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ) -> ListDocumentResponse:
         """
         Consultar los documentos de Soporte de Pagos al Exterior Electrónico (47)
         """
+        status, legal_status = cls._validate_document_list_params(status, legal_status, limit, page)
         url = build_url(
             cls.config.endpoint_payment_abroad_supports,
             company_id,
@@ -767,7 +797,7 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_cancellation(cls, id_: str, company_id: str = None) -> Dict[str, Any]:
+    def get_cancellation(cls, id_: str, company_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Consultar el estado de la anulación
         """
@@ -778,21 +808,22 @@ class AlanubeAPI:
     @classmethod
     def get_cancellations(
         cls,
-        company_id=None,
-        limit=25,
-        page=1,
-        start=None,
-        end=None,
+        company_id: Optional[str] = None,
+        limit: int = 25,
+        page: int = 1,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
     ):
         """
         Consultar el estado de las anulaciones
         """
+        validate_pagination(limit, page)
         url = build_url(cls.config.endpoint_cancellations, company_id, limit=limit, page=page, start=start, end=end)
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
     @classmethod
-    def get_received_document(cls, id_: str, company_id: str = None) -> ReceivedDocumentsResponse:
+    def get_received_document(cls, id_: str, company_id: Optional[str] = None) -> ReceivedDocumentsResponse:
         """
         Consultar un 'documento recibido'
         """
@@ -803,11 +834,11 @@ class AlanubeAPI:
     @classmethod
     def get_received_documents(
         cls,
-        company_id: str = None,
+        company_id: Optional[str] = None,
         limit: int = 25,
         page: int = 1,
-        start: str = None,
-        end: str = None,
+        start: Optional[str] = None,
+        end: Optional[str] = None,
     ) -> ListReceivedDocumentsResponse:
         """
         Consultar varios 'documentos recibidos'
@@ -827,13 +858,14 @@ class AlanubeAPI:
         - response (ListReceivedDocumentsResponse): La respuesta de la API con
             la lista de documentos recibidos.
         """
+        validate_pagination(limit, page)
         url = cls.config.endpoint_received_documents
         url = build_url(url, company_id=company_id, limit=limit, page=page, start=start, end=end)
         response = cls.get(url, expected_response_code=200)
         return response.json()
 
     @classmethod
-    def check_directory(cls, rnc: str = None, company_id: str = None):
+    def check_directory(cls, rnc: Optional[str] = None, company_id: Optional[str] = None):
         """
         Consultar el directorio de compañías activas para facturación electrónica.
 
@@ -845,6 +877,7 @@ class AlanubeAPI:
         Retorna:
         - data (dict o list): Los datos de la compañía o una lista de compañías.
         """
+        validate_identification_number(rnc, "rnc")
         url = cls.config.endpoint_check_directory
         url = build_url(url, company_id, rnc=rnc)
 
@@ -859,9 +892,9 @@ class AlanubeAPI:
     @classmethod
     def check_dgii_status(
         cls,
-        environment: int = None,
+        environment: Optional[int] = None,
         maintenance: bool = False,
-        company_id: str = None,
+        company_id: Optional[str] = None,
     ) -> List[Dict[str, Any]] | Dict[str, Any]:
         """
         Consultar el estado de los servicios de la DGII.
@@ -881,6 +914,7 @@ class AlanubeAPI:
         - data (dict o list): El estado del servicio o las ventanas de
             mantenimiento de la DGII.
         """
+        validate_environment(environment)
         url = cls.config.endpoint_check_dgii_status
         url = build_url(url, company_id, environment=environment, maintenance=maintenance)
         response = cls.get(url, expected_response_code=200)
@@ -892,8 +926,8 @@ class AlanubeAPI:
         cls,
         company_id: str,
         legal_status: str,
-        date_from: str = None,
-        date_until: str = None,
+        date_from: Optional[str] = None,
+        date_until: Optional[str] = None,
     ) -> ReportCompaniesDocumentsTotalResponse:
         """
         Obtiene el total de documentos electrónicos emitidos por una compañía
@@ -908,6 +942,7 @@ class AlanubeAPI:
         - date_until (str, opcional): Fecha de fin del rango de fechas.
             Si no se especifica, se toma la fecha actual.
         """
+        legal_status = cls._validate_required_legal_status(legal_status)
         url = cls.config.endpoint_reports_companies_documents_total.format(idCompany=company_id)
         url = build_url(url, legal_status=legal_status, date_from=date_from, date_until=date_until)
         response = cls.get(url, expected_response_code=200)
@@ -916,9 +951,9 @@ class AlanubeAPI:
     @classmethod
     def get_report_users_documents_total(
         cls,
-        legal_status: str = None,
-        date_from: str = None,
-        date_until: str = None,
+        legal_status: str,
+        date_from: Optional[str] = None,
+        date_until: Optional[str] = None,
     ) -> ReportUsersDocumentsTotalResponse:
         """
         Obtiene el total de documentos electrónicos emitidos por el usuario
@@ -933,6 +968,7 @@ class AlanubeAPI:
         - date_until (str, opcional): Fecha de fin del rango de fechas.
             Si no se especifica, se toma la fecha actual.
         """
+        legal_status = validate_legal_status(legal_status, required=True)
         url = cls.config.endpoint_reports_users_documents_total
         url = build_url(url, legal_status=legal_status, date_from=date_from, date_until=date_until)
         response = cls.get(url, expected_response_code=200)
