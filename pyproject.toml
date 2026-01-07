@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alanube"
-version = "1.1.0"
+version = "1.2.0"
 authors = [
   { name = "Wilmer Martinez" },
 ]
@@ -36,6 +36,7 @@ classifiers = [# https://pypi.org/classifiers/
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
   "requests",
@@ -54,6 +55,9 @@ keywords = [
   "facturación electrónica",
   "factura",
   "factura electrónica",
+  "rd",
+  "republica dominicana",
+  "dominican republic",
 ]
 
 [project.urls]

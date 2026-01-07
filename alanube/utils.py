@@ -1,10 +1,16 @@
 
 
 import functools
+from typing import Optional
 import warnings
 
 
-def build_url(url, company_id: str = None, id_: str = None, **params) -> str:
+def build_url(
+    url: str,
+    company_id: Optional[str] = None,
+    id_: Optional[str] = None,
+    **params,
+) -> str:
     """
     Build a URL from the given parameters.
     """
@@ -28,7 +34,7 @@ def build_query_params(**params) -> str:
     return "&".join([f"{camel_case(k)}={v}" for k, v in params.items() if v is not None])
 
 
-def camel_case(name):
+def camel_case(name: str) -> str:
     """
     Convert snake_case to camelCase.
     """
@@ -36,14 +42,14 @@ def camel_case(name):
     return parts[0] + ''.join(x.title() for x in parts[1:])
 
 
-def snake_case(name):
+def snake_case(name: str) -> str:
     """
     Convert camelCase to snake_case.
     """
     return ''.join(['_' + i.lower() if i.isupper() else i for i in name]).lstrip('_')
 
 
-def deprecated(message=None):
+def deprecated(message: Optional[str] = None):
     """
     This is a decorator which can be used to mark functions as deprecated.
     """
@@ -59,7 +65,7 @@ def deprecated(message=None):
             return func(*args, **kwargs)
         return wrapper
 
-    # Permite usar el decorador tanto con paréntesis como sin ellos
+    # Allow usage without parentheses and with parentheses
     if callable(message):
         return decorator(message)
 

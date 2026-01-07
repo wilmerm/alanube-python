@@ -91,7 +91,7 @@ class ReportCompaniesDocumentsTotalResponse(TypedDict):
     data: ReportCompaniesDocumentsTotalData
 
 
-Companies = Dict[str, ReportCompaniesDocumentsTotalData] # El key es el company_id
+Companies = Dict[str, ReportCompaniesDocumentsTotalData]  # Key is company ID
 
 
 class ReportUsersDocumentsTotalData(TypedDict):

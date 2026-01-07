@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 
 from alanube.do import Alanube
 from alanube.do.api import APIConfig, AlanubeAPI
+from alanube.do.exceptions import ValidationError
 
 
 class TestAlanube(unittest.TestCase):
@@ -149,3 +150,33 @@ class TestAlanubeAPI(unittest.TestCase):
             params=None,
             json=None
         )
+
+    def test_get_invoices_invalid_status_validation(self):
+        with patch('alanube.do.api.requests.request') as mock_request:
+            with self.assertRaises(ValidationError):
+                AlanubeAPI.get_invoices(status="INVALID")
+            mock_request.assert_not_called()
+
+    def test_get_invoices_invalid_legal_status_validation(self):
+        with patch('alanube.do.api.requests.request') as mock_request:
+            with self.assertRaises(ValidationError):
+                AlanubeAPI.get_invoices(legal_status="ACCEPTED,WRONG")
+            mock_request.assert_not_called()
+
+    def test_check_directory_invalid_rnc(self):
+        with patch('alanube.do.api.requests.request') as mock_request:
+            with self.assertRaises(ValidationError):
+                AlanubeAPI.check_directory(rnc="123-456")
+            mock_request.assert_not_called()
+
+    def test_check_dgii_status_invalid_environment(self):
+        with patch('alanube.do.api.requests.request') as mock_request:
+            with self.assertRaises(ValidationError):
+                AlanubeAPI.check_dgii_status(environment=4)
+            mock_request.assert_not_called()
+
+    def test_get_received_documents_invalid_pagination(self):
+        with patch('alanube.do.api.requests.request') as mock_request:
+            with self.assertRaises(ValidationError):
+                AlanubeAPI.get_received_documents(limit=0)
+            mock_request.assert_not_called()

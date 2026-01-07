@@ -51,6 +51,15 @@ ALANUBE_RESPONSE_STATUS_CHOICES = (
 )
 
 
+LEGAL_STATUS_CHOICES = (
+    ("NOT_FOUND", "Not found"),                          # El documento no fue encontrado en la DGII
+    ("IN_PROCESS", "In process"),                          # El documento se encuentra en proceso de validación
+    ("ACCEPTED", "Accepted"),                              # El documento fue aceptado por la DGII
+    ("ACCEPTED_WITH_OBSERVATIONS", "Accepted with observations"),  # El documento fue aceptado con observaciones
+    ("REJECTED", "Rejected"),                                # El documento fue rechazado por la DGII
+)
+
+
 CURRENCIES = dict(
     BRL='BRL',  # REAL BRASILENO
     CAD='CAD',  # DOLAR CANADIENSE
@@ -68,6 +77,7 @@ CURRENCIES = dict(
     VEF='VEF',  # BOLIVAR FUERTE VENEZOLANO
     HTG='HTG',  # GURDA HAITIANA
     MXN='MXN',  # PESO MEXICANO
+    COP='COP',  # PESO COLOMBIANO
 )
 
 
