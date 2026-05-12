@@ -98,6 +98,26 @@ Now you can easily and efficiently use the Alanube API with this Python library!
 | `get_report_company_accepted_documents_monthly` | Monthly totals of accepted documents (12 months). |
 | `get_report_company_accepted_documents_15_days` | Daily totals of accepted documents (last 15 days). |
 
+### Error Handling
+
+Since v1.3.0, API errors are parsed into structured `APIErrorItem` objects:
+
+```python
+from alanube.do.exceptions import APIErrorItem, ValidationError
+
+try:
+    company = AlanubeAPI.create_company({...})
+except ValidationError as e:
+    for error in e.error_items:
+        print(f"[{error.code}] {error.message} (field: {error.field})")
+```
+
+Supported error formats:
+- **Unified format**: `{"code": 400, "errors": [{"code": "...", "message": "...", "field": "..."}]}`
+- **Legacy formats**: `{"message": [...]}`, `{"errors": [...]}`, etc.
+
+Legacy formats continue to work without changes.
+
 ## Contents
 
 - `do`: Fully implemented for the Dominican Republic (DGII).

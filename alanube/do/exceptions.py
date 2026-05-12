@@ -1,8 +1,95 @@
-from typing import Optional
+from dataclasses import dataclass
+from typing import Any, List, Optional
 import requests
 
 
 NON_FIELD_ERRORS = "non_field_errors"
+
+
+@dataclass
+class APIErrorItem:
+    """
+    This represents an individual error in the new unified API format.
+
+    Attributes:
+        `code`: Unique identifier for the error (e.g., "INVALID_FIELD").
+        `message`: Diagnostic description of the error in English.
+        `field`: Field associated with the error, when applicable. Can be None.
+    """
+    code: str
+    message: str
+    field: Optional[str] = None
+
+
+def _parse_error_response(errors: Any) -> List[APIErrorItem]:
+    """
+    Parses the API error response and returns a list of APIErrorItems.
+
+    Supports both the new unified format and legacy formats to maintain
+    backward compatibility during the transition.
+
+    New format:
+        ```json
+        { "code": 400, "errors": [ { "code": "...", "message": "...", "field": "..." } ] }
+        ```
+
+    Legacy formats:
+        ```
+        { "code": 400, "message": ["error message"] }
+        { "code": 400, "errors": ["error message"] }
+        { "errors": ["error message"] }
+        ```
+
+    """
+    items: List[APIErrorItem] = []
+
+    if isinstance(errors, dict):
+        # --- New unified format ---
+        raw_errors = errors.get("errors")
+        if isinstance(raw_errors, list):
+            for raw in raw_errors:
+                if isinstance(raw, dict) and "code" in raw and "message" in raw:
+                    items.append(APIErrorItem(
+                        code=str(raw["code"]),
+                        message=str(raw["message"]),
+                        field=str(raw["field"]) if raw.get("field") else None,
+                    ))
+                elif isinstance(raw, str):
+                    # Legacy: errors as a list of strings
+                    items.append(APIErrorItem(
+                        code="UNKNOWN",
+                        message=raw,
+                        field=None,
+                    ))
+            if items:
+                return items
+
+        # --- Legacy formats (dict with "message" or "errors" as a list/string) ---
+        for key in ("message", "errors"):
+            raw = errors.get(key)
+            if isinstance(raw, list):
+                for msg in raw:
+                    if isinstance(msg, str):
+                        items.append(APIErrorItem(code="UNKNOWN", message=msg, field=None))
+                if items:
+                    return items
+            elif isinstance(raw, str):
+                items.append(APIErrorItem(code="UNKNOWN", message=raw, field=None))
+                return items
+
+        # --- Fallback: take the entire dict as a string representation ---
+        items.append(APIErrorItem(code="UNKNOWN", message=str(errors), field=None))
+
+    elif isinstance(errors, list):
+        # Legacy: errors as a flat list of strings
+        for msg in errors:
+            if isinstance(msg, str):
+                items.append(APIErrorItem(code="UNKNOWN", message=msg, field=None))
+
+    if not items:
+        items.append(APIErrorItem(code="UNKNOWN", message=str(errors), field=None))
+
+    return items
 
 
 class AlanubeError(Exception):
@@ -16,7 +103,8 @@ class APIError(AlanubeError):
 
     Attributes:
         message:      explanation of the error
-        errors:       errors returned by the API
+        errors:       list of APIErrorItem parsed from the API response
+        error_items:  alias for errors (list of APIErrorItem)
         response:     the HTTP response object
         status_code:  HTTP status code if available
         url:          request URL if available
@@ -29,14 +117,18 @@ class APIError(AlanubeError):
         response: Optional[requests.Response] = None,
     ):
         self.response = response
-        self.errors = errors or {}
         self.status_code = getattr(response, "status_code", None)
         self.url = getattr(response, "url", None)
 
+        # Parse the errors to the new unified format
+        self.error_items: List[APIErrorItem] = _parse_error_response(errors or {})
+        self.errors: List[APIErrorItem] = self.error_items  # alias for compatibility
+
         if message:
             final_message = message
-        elif self.errors:
-            final_message = self.errors.get("message") or str(self.errors)
+        elif self.error_items:
+            # Use the first available message as the main message
+            final_message = self.error_items[0].message
         elif self.status_code or self.url:
             final_message = f"{self.status_code or 'N/A'}: {self.url or 'unknown url'}"
         else:
@@ -47,8 +139,8 @@ class APIError(AlanubeError):
 
     @property
     def messages(self):
-        """Return a list of error messages."""
-        return [e2 for e1 in self.errors.values() for e2 in (e1 if isinstance(e1, list) else [e1])]
+        """Return a list of error messages from parsed error items."""
+        return [item.message for item in self.error_items]
 
 
 class ObjectDoesNotExist(APIError):
