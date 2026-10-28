@@ -45,6 +45,11 @@ data = Alanube.send_document(encf_type=31, payload)
 
 Now you can easily and efficiently use the Alanube API with this Python library!
 
+To retrieve an already-issued document PDF, Generic is selected by default. Use pdf_type="pos" to request the POS representation:
+
+    generic_document = Alanube.get_document(31, "DOCUMENT_ID")
+    pos_document = Alanube.get_document(31, "DOCUMENT_ID", pdf_type="pos")
+
 ### Dominican Republic API Methods
 
 | Method | Description |
