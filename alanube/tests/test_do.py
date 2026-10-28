@@ -156,7 +156,7 @@ class TestAlanubeAPI(unittest.TestCase):
             'GET',
             f'https://sandbox.alanube.co/dom/v1/fiscal-invoices/{invoice_id}',
             headers=AlanubeAPI.get_headers(),
-            params=None,
+            params={"pdfType": "generic"},
             json=None
         )
 
@@ -188,6 +188,61 @@ class TestAlanubeAPI(unittest.TestCase):
         with patch('alanube.do.api.requests.request') as mock_request:
             with self.assertRaises(ValidationError):
                 AlanubeAPI.get_received_documents(limit=0)
+            mock_request.assert_not_called()
+
+    @patch("alanube.do.Alanube.get_document_func_map")
+    def test_get_document_forwards_pdf_type_and_preserves_company_id(self, mock_get_document_func_map):
+        mock_func = MagicMock(return_value={"id": "123"})
+        mock_get_document_func_map.get.return_value = mock_func
+
+        self.assertEqual(Alanube.get_document(31, "123", "company-123"), {"id": "123"})
+        mock_func.assert_called_once_with("123", "company-123", "generic")
+
+        mock_func.reset_mock()
+        self.assertEqual(Alanube.get_document(31, "123", "company-123", "pos"), {"id": "123"})
+        mock_func.assert_called_once_with("123", "company-123", "pos")
+
+    @patch("alanube.do.Alanube.get_document")
+    def test_get_document_status_forwards_pdf_type_and_warns(self, mock_get_document):
+        mock_get_document.return_value = {"id": "123"}
+        with self.assertWarns(DeprecationWarning):
+            result = Alanube.get_document_status(31, "123", "company-123", "pos")
+        self.assertEqual(result, {"id": "123"})
+        mock_get_document.assert_called_once_with(31, "123", "company-123", "pos")
+
+    def test_single_document_pdf_type_propagates_for_all_document_types(self):
+        methods = [
+            (AlanubeAPI.get_fiscal_invoice, AlanubeAPI.config.endpoint_fiscal_invoices),
+            (AlanubeAPI.get_invoice, AlanubeAPI.config.endpoint_invoices),
+            (AlanubeAPI.get_debit_note, AlanubeAPI.config.endpoint_debit_notes),
+            (AlanubeAPI.get_credit_note, AlanubeAPI.config.endpoint_credit_notes),
+            (AlanubeAPI.get_purchase, AlanubeAPI.config.endpoint_purchases),
+            (AlanubeAPI.get_minor_expense, AlanubeAPI.config.endpoint_minorexpenses),
+            (AlanubeAPI.get_special_regime, AlanubeAPI.config.endpoint_special_regimes),
+            (AlanubeAPI.get_gubernamental, AlanubeAPI.config.endpoint_gubernamentals),
+            (AlanubeAPI.get_export_support, AlanubeAPI.config.endpoint_export_supports),
+            (AlanubeAPI.get_payment_abroad_support, AlanubeAPI.config.endpoint_payment_abroad_supports),
+        ]
+
+        with patch("alanube.do.api.requests.request") as mock_request:
+            mock_response = MagicMock()
+            mock_response.json.return_value = {"id": "123"}
+            mock_response.status_code = 200
+            mock_request.return_value = mock_response
+
+            for method, endpoint in methods:
+                for pdf_type in ("generic", "pos"):
+                    with self.subTest(method=method.__name__, pdf_type=pdf_type):
+                        method("123", "company-123", pdf_type)
+                        self.assertEqual(mock_request.call_args.kwargs["params"], {"pdfType": pdf_type})
+                        self.assertEqual(mock_request.call_args.args[1], f"{endpoint}/123/idCompany/company-123")
+
+    def test_invalid_pdf_type_is_rejected_before_http(self):
+        with patch("alanube.do.api.requests.request") as mock_request:
+            for pdf_type in (None, "GENERIC", "pdf", 1):
+                with self.subTest(pdf_type=pdf_type):
+                    with self.assertRaises(ValidationError):
+                        AlanubeAPI.get_fiscal_invoice("123", pdf_type=pdf_type)
             mock_request.assert_not_called()
 
 

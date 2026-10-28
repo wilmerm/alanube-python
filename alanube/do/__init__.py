@@ -37,7 +37,7 @@ class Alanube:
     - `get_cancellations`: Get a list of cancellations.
     - `send_cancellation`: Send a cancellation request to the Alanube API.
     - `send_document`: Send an electronic document of the specified type.
-    - `get_document`: Retrieve the status of an electronic document of the specified type.
+    - `get_document`: Retrieve an electronic document PDF in Generic or POS format.
     - `get_documents`: Retrieve a list of electronic documents of the specified type.
     - `get_document_status`: (Deprecated) Retrieve the status of an electronic document.
     - `get_report_companies_documents_total`: Get a report of total documents for companies.
@@ -148,18 +148,24 @@ class Alanube:
         return func(payload)
 
     @staticmethod
-    def get_document(encf_type: int, document_id: str, company_id: Optional[str] = None):
+    def get_document(
+        encf_type: int,
+        document_id: str,
+        company_id: Optional[str] = None,
+        pdf_type: str = "generic",
+    ):
         """
-        Retrieve the status of an electronic document of the specified type
+        Retrieve metadata for an already-issued electronic document of the specified type
         from the Alanube API.
 
-        This method sends a request to get the status of the document.
+        This method returns document metadata, including a URL for the requested PDF representation; it does not return PDF binary content.
 
         Args:
         ----------
         - `encf_type` (int): The type of the eNCF document.
         - `document_id` (str): The ID of the document to retrieve the status for.
         - `company_id` (str): Optional, asociated company ID.
+        - `pdf_type` (str): Optional, PDF representation: `generic` (default) or `pos`.
 
         Returns:
             `dict`: The response from the Alanube API.
@@ -167,7 +173,7 @@ class Alanube:
         func = Alanube.get_document_func_map.get(encf_type)
         if func is None:
             raise NotImplementedError(f"No implementation for eNCF type: {encf_type}")
-        return func(document_id, company_id)
+        return func(document_id, company_id, pdf_type)
 
     @staticmethod
     def get_documents(
@@ -213,9 +219,14 @@ class Alanube:
         )
 
     @staticmethod
-    def get_document_status(encf_type: int, document_id: str, company_id: Optional[str] = None):
+    def get_document_status(
+        encf_type: int,
+        document_id: str,
+        company_id: Optional[str] = None,
+        pdf_type: str = "generic",
+    ):
         warnings.warn("This method is deprecated. Use `get_document` instead.", DeprecationWarning)
-        return Alanube.get_document(encf_type, document_id, company_id)
+        return Alanube.get_document(encf_type, document_id, company_id, pdf_type)
 
 
 __all__ = ['Alanube']

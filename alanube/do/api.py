@@ -13,6 +13,7 @@ from .validators import (
     validate_identification_number,
     validate_legal_status,
     validate_pagination,
+    validate_pdf_type,
 )
 from .types import (
     DocumentResponse,
@@ -316,12 +317,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_fiscal_invoice(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_fiscal_invoice(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado de la Factura de Crédito Fiscal Electrónica (31)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_fiscal_invoices, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -364,12 +366,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_invoice(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_invoice(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado de la Factura de Consumo Electrónica (32)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_invoices, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -412,12 +415,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_debit_note(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_debit_note(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado de la Nota de Débito Electrónica (33)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_debit_notes, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -460,12 +464,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_credit_note(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_credit_note(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado de la Nota de Crédito Electrónica (34)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_credit_notes, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -508,12 +513,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_purchase(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_purchase(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado del Documento de Compra Electrónico (41)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_purchases, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -556,12 +562,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_minor_expense(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_minor_expense(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado del Documento de Gasto Menor Electrónico (43)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_minorexpenses, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -604,12 +611,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_special_regime(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_special_regime(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado del Documento de Régimen Especial Electrónico (44)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_special_regimes, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -652,12 +660,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_gubernamental(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_gubernamental(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado del Documento Gubernamental Electrónico (45)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_gubernamentals, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -700,12 +709,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_export_support(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_export_support(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado del Documento de Soporte de Exportación Electrónico (46)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_export_supports, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod
@@ -748,12 +758,13 @@ class AlanubeAPI:
         return response.json()
 
     @classmethod
-    def get_payment_abroad_support(cls, id_: str, company_id: Optional[str] = None) -> DocumentResponse:
+    def get_payment_abroad_support(cls, id_: str, company_id: Optional[str] = None, pdf_type: str = "generic") -> DocumentResponse:
         """
         Consultar el estado del Documento de Soporte de Pagos al Exterior Electrónico (47)
         """
+        pdf_type = validate_pdf_type(pdf_type)
         url = build_url(cls.config.endpoint_payment_abroad_supports, company_id, id_)
-        response = cls.get(url, expected_response_code=200)
+        response = cls.get(url, params={"pdfType": pdf_type}, expected_response_code=200)
         return response.json()
 
     @classmethod

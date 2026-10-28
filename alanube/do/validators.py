@@ -21,6 +21,7 @@ ALLOWED_DOCUMENT_STATUSES = set(status for status, _ in ALANUBE_RESPONSE_STATUS_
 ALLOWED_LEGAL_STATUSES = set(status for status, _ in LEGAL_STATUS_CHOICES)
 
 ALLOWED_ENVIRONMENTS = {1, 2, 3}
+ALLOWED_PDF_TYPES = {"generic", "pos"}
 
 IDENTIFICATION_PATTERN = re.compile(r"^(\d{9}|\d{11})$")
 
@@ -117,3 +118,9 @@ def validate_environment(environment: Optional[int]):
         raise ValidationError(message="environment must be an integer (1, 2, or 3).")
     if environment not in ALLOWED_ENVIRONMENTS:
         raise ValidationError(message="environment must be one of 1 (PreCertificacion), 2 (Produccion), or 3 (Certificacion).")
+
+
+def validate_pdf_type(pdf_type: str) -> str:
+    if not isinstance(pdf_type, str) or pdf_type not in ALLOWED_PDF_TYPES:
+        raise ValidationError(message=f"Invalid pdf_type '{pdf_type}'. Allowed: {sorted(ALLOWED_PDF_TYPES)}")
+    return pdf_type
